@@ -1,0 +1,6 @@
+@use "../utils/utils" as utils;
+
+body{
+    background-color: utils.$color-gray-light;
+}
+

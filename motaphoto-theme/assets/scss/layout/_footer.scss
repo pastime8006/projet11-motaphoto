@@ -1,0 +1,9 @@
+@use "../utils/utils" as utils;
+@use "../base/typography";
+
+
+p{
+    color: utils.$color-primary;
+    @include utils.font-poppins(30px, bold,italic, 1);
+    
+}

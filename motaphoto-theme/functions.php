@@ -8,6 +8,9 @@ function motaphoto_theme_enqueue_scripts() {
         filemtime( get_stylesheet_directory() . '/assets/css/main.css' )
     );
 
+// Charge la version de jQuery fournie par WordPress.
+wp_enqueue_script( 'jquery' );
+
 //============================
 // scripts.js
 //============================
@@ -15,7 +18,7 @@ function motaphoto_theme_enqueue_scripts() {
     wp_enqueue_script(
         'motaphoto-theme-scripts',
         get_theme_file_uri( '/assets/js/scripts.js' ),
-        array(),
+        array( 'jquery' ),
         '1.0',
         true
     );

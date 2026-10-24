@@ -1,2 +1,16 @@
 // Feuille Sass principale du thème.
 // Ajoute les styles du site dans ce fichier ou importe d'autres fichiers Sass ici.
+@use "base/reset";
+@use "base/typography";
+@use "base/base";
+@use "components/modale";
+@use "layout/layout";
+
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

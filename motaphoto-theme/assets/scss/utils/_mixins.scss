@@ -1,0 +1,21 @@
+//===================
+// Typography
+//===================
+
+@mixin font-space-mono($size, $weight: 400, $style: normal, $line-height: 1.5) {
+  font-family: "Space Mono", sans-serif;
+  font-size: $size;
+  font-weight: $weight;
+  font-style: $style;
+  line-height: $line-height;
+  font-display: swap;
+}
+
+@mixin font-poppins($size, $weight: 400, $style: normal, $line-height: 1.5) {
+  font-family: "Poppins", sans-serif;
+  font-size: $size;
+  font-weight: $weight;
+  font-style: $style;
+  line-height: $line-height;
+  font-display: swap;
+}
