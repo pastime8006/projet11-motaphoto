@@ -13,8 +13,22 @@
 <?php wp_body_open(); ?>
 
 <header class="site-header">
-    <!-- Le titre du site renvoie vers la page d'accueil. -->
-    <a class="site-title" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-        <?php bloginfo( 'name' ); ?>
-    </a>
+    <div class="custom-logo-container">
+        <?php the_custom_logo(); ?>
+    </div>
+
+    <nav class="site-navigation" aria-label="Navigation principale">
+        <?php
+        // Affiche le menu principal défini dans l'administration.
+        wp_nav_menu(
+            array(
+                'theme_location' => 'main-menu',
+                'container'      => false,
+                'menu_class'     => 'main-menu',
+                'fallback_cb'    => false,
+            )
+        );
+        ?>
+    </nav>
+
 </header>

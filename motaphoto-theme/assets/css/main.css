@@ -1,3 +1,35 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 /* Space mono regular */
 @font-face {
   font-family: "Space Mono";
@@ -48,26 +80,75 @@
   font-weight: 300;
   font-display: swap;
 }
-body {
-  background-color: #D8D8D8;
+.site-header {
+  width: 100%;
+  max-width: 1440px;
+  background-color: white;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #000;
 }
-
-p {
-  color: #E00000;
-  font-family: "Poppins", sans-serif;
-  font-size: 30px;
-  font-weight: bold;
-  font-style: italic;
-  line-height: 1;
-  font-display: swap;
-}
-
-body {
-  min-height: 100vh;
+.site-header .custom-logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+}
+.site-header .custom-logo {
+  margin-left: 146px;
+}
+.site-header .site-navigation {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 146px;
+}
+.site-header .site-navigation .main-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+}
+.site-header .site-navigation .main-menu .menu-item {
+  list-style: none;
+  font-family: "Space Mono", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  font-display: swap;
+}
+.site-header .site-navigation .main-menu .menu-item a {
+  text-decoration: none;
+  color: black;
+}
+
+footer {
+  width: 100%;
+  max-width: 1440px;
+  height: 0px;
+  border-top: 1px solid #000;
+}
+footer .footer-menu {
+  display: flex;
+  justify-content: center;
+  gap: 45px;
+  padding-top: 20px;
+  gap: 86px;
+}
+footer .footer-menu .menu-item {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  font-display: swap;
+  color: #000;
+  list-style: none;
+}
+footer .footer-menu .menu-item a {
+  color: #000;
+  text-decoration: none;
 }
 
 /*# sourceMappingURL=main.css.map */

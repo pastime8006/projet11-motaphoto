@@ -1,10 +1,20 @@
 <!-- Pied de page commun aux pages du thème. -->
 <footer class="site-footer">
-    <!-- Affiche l'année actuelle et le nom configuré dans WordPress. -->
-    <p>&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></p>
+    <?php
+    wp_nav_menu(
+        array(
+            'theme_location' => 'footer-menu',
+            'container'      => false,
+            'menu_class'     => 'footer-menu',
+            'fallback_cb'    => false,
+        )
+    );
+    ?>
 </footer>
 
 <!-- WordPress ajoute ici les scripts chargés dans le footer. -->
-<?php wp_footer(); ?>
+<?php
+wp_footer();
+?>
 </body>
 </html>

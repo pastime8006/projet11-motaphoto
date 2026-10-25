@@ -19,3 +19,13 @@
   line-height: $line-height;
   font-display: swap;
 }
+
+//===================
+// Centrage flex
+//===================
+
+@mixin flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
