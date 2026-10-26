@@ -12,6 +12,8 @@
     ?>
 </footer>
 
+<?php get_template_part( 'templates_part/modal' ); ?>
+
 <!-- WordPress ajoute ici les scripts chargés dans le footer. -->
 <?php
 wp_footer();

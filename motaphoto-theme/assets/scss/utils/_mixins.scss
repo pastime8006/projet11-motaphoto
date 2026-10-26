@@ -29,3 +29,36 @@
   align-items: center;
   justify-content: center;
 }
+
+//===================
+// Média Queries
+//===================
+
+
+// Desktop
+@mixin mquery-1248 {
+  @media screen and (max-width: 1248px) {
+    @content;
+  }
+}
+
+//  Laptop
+@mixin mquery-1024 {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+//  Tablet
+@mixin mquery-768 {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+// Large phone
+@mixin mquery-480 {
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}
