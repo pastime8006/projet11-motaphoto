@@ -4,6 +4,9 @@
 // Inclut l'en-tête commun du thème.
 get_header();
 
+?>
+<h1>ceci est page.php</h1>
+<?php
 // La boucle WordPress récupère la page demandée et prépare ses données.
 while ( have_posts() ) :
     the_post();
