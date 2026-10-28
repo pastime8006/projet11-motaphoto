@@ -1,7 +1,7 @@
 <?php
 // Inclut l'en-tête commun (doctype, head et début du body).
 get_header(); ?>
-h1>ceci est index.php</h1>
+<h1>ceci est index.php</h1>
 <main id="main" class="site-main">
 <?php
 while (have_posts()) : the_post(); ?>

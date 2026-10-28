@@ -6,7 +6,10 @@
  */
 
 get_header();
+?>
+<h1>ceci est photos-page.php</h1>
 
+<?php
 // Récupérer les termes des taxonomies
 $categories = get_terms([
     'taxonomy'   => 'categorie',
@@ -68,7 +71,8 @@ if (!isset($sort_options[$selected_sort])) {
 $query_args = [
     'post_type'      => 'photo',
     'post_status'    => 'publish',
-    'posts_per_page' => -1,
+    'posts_per_page' => 8,
+    'paged'          => max(1, absint(get_query_var('paged')), absint(get_query_var('page'))),
 ];
 
 $query_args = array_merge(
@@ -107,7 +111,7 @@ $the_query = new WP_Query($query_args);
 
     <h1>Photos</h1>
 
-    <form method="get">
+    <form method="get" action="<?php echo esc_url(get_permalink(get_queried_object_id())); ?>">
 
         <label for="categorie">Catégorie :</label>
         <select name="categorie" id="categorie">
@@ -174,7 +178,7 @@ $the_query = new WP_Query($query_args);
 
                 <?php if (has_post_thumbnail()) : ?>
                     <a href="<?php the_permalink(); ?>">
-                        <?php the_post_thumbnail('large'); ?>
+                        <?php the_post_thumbnail('metaphoto-photo'); ?>
                     </a>
                 <?php endif; ?>
 
@@ -217,6 +221,21 @@ $the_query = new WP_Query($query_args);
 
         <p>Aucune photo trouvée.</p>
 
+    <?php endif; ?>
+
+    <?php if ($the_query->max_num_pages > 1) : ?>
+        <nav class="photos-pagination" aria-label="Pagination des photos">
+            <?php
+            echo paginate_links([
+                'base'      => esc_url(add_query_arg('paged', '%#%')),
+                'format'    => '',
+                'current'   => max(1, absint(get_query_var('paged')), absint(get_query_var('page'))),
+                'total'     => $the_query->max_num_pages,
+                'prev_text' => __('Précédent', 'motaphoto-theme'),
+                'next_text' => __('Suivant', 'motaphoto-theme'),
+            ]);
+            ?>
+        </nav>
     <?php endif; ?>
 
     <?php wp_reset_postdata(); ?>

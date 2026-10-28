@@ -35,6 +35,7 @@ add_action( 'wp_enqueue_scripts', 'motaphoto_theme_enqueue_scripts' );
 function motaphoto_theme_setup() {
     add_theme_support( 'title-tag' );
     add_theme_support( 'post-thumbnails' );
+    add_image_size( 'metaphoto-photo', 600, 600, true );
       add_theme_support( 'custom-logo', array(
         'height'      => 100,
         'width'       => 300,

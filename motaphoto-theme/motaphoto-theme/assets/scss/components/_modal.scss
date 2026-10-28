@@ -1,0 +1,109 @@
+@use "../utils/utils" as utils;
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000060;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+
+  .popup-contact {
+    position: relative;
+    width: 100%;
+    max-width: 597px;
+    height: 769px;
+    background-color: utils.$color-white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 5px solid utils.$color-black;
+    @include utils.font-poppins(12px, 500);
+  }
+
+  .popup-title {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: utils.$color-white;
+  }
+
+  .popup-title img {
+    width: 885px;
+    height: 106px;
+    max-width: none;
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  }
+
+/*=========================
+  Contact form 7
+/*=========================*/
+
+.wpcf7-form {
+  margin-top: 24px !important;
+}
+
+.popup-contact .wpcf7 {
+  width: 100%;
+  max-width: 263px;
+}
+
+.popup-contact .wpcf7-form-control-wrap {
+  position: relative;
+  display: block;
+  padding-bottom: 18px;
+}
+
+.popup-contact .wpcf7-form-control-wrap:has(textarea) {
+  padding-bottom: 0;
+}
+
+.popup-contact .wpcf7-not-valid-tip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+
+.popup-contact .wpcf7-response-output {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 16px 0 0 !important;
+  background-color: utils.$color-white;
+}
+
+/* Tous les champs du formulaire */
+.popup-contact .wpcf7 input,
+.popup-contact .wpcf7 textarea {
+  width: 100%;
+  max-width: 263px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid utils.$color-gray-light;
+}
+
+.popup-contact .wpcf7 input {
+  height: 40px;
+  margin-top: 4px;
+}
+.popup-contact .wpcf7 textarea {
+  height: 210px;
+  margin-top: 4px;
+}
+
+.popup-contact .wpcf7-submit {
+  height: 50px !important;
+  margin-top: 0;
+  @include utils.font-space-mono(12px, 400);
+}

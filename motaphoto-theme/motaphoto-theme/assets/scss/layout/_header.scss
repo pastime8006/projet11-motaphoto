@@ -1,0 +1,42 @@
+@use "../utils/utils" as utils;
+
+
+.site-header {
+  width: 100%;
+  max-width: 1440px;
+  background-color: white;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #000;
+
+  .custom-logo-container {
+    @include utils.flex-center;
+  }
+
+  .custom-logo {
+    margin-left: 146px;
+  }
+  .site-navigation {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 146px;
+    
+
+    .main-menu {
+      @include utils.flex-center;
+      gap: 45px;
+
+      .menu-item {
+        list-style: none;
+        @include utils.font-space-mono(16px);
+      }
+
+      .menu-item a {
+        text-decoration: none;
+        color: black;
+      }
+    }
+  }
+}
