@@ -1,0 +1,67 @@
+@use "../utils/utils" as utils;
+
+
+.sorting-form {
+  width: 100%;
+  max-width: 1166px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 39px;
+  margin-top: 40px;
+
+  .form-taxonomy {
+    width: 100%;
+    max-width: 564px;
+    display: flex;
+    justify-content: space-between;
+
+
+    .form-categorie,
+    .form-format {
+      @include utils.form-select;
+    }
+  }
+  .form-tri {
+    @include utils.form-select;
+  }
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 564px));
+  justify-content: center;
+  gap: 40px;
+
+  .photo-card {
+    min-width: 0;
+  }
+  .photo-card > a {
+    display: block;
+    aspect-ratio: 564 / 495;
+    overflow: hidden;
+  }
+
+  .photo-card > a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.gallery-pagination {
+  width: 100%;
+  max-width: 1440px;
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+
+  .btn-pagination {
+    @include utils.motaphoto-btn;
+  }
+}
+
+@media (max-width: 767px) {
+  .photos-grid {
+    grid-template-columns: minmax(0, 564px);
+  }
+}

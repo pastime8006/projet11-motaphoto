@@ -8,7 +8,7 @@
         </h1>
 
         <?php
-        echo apply_shortcodes(
+        echo do_shortcode(
             '[contact-form-7 id="543a9a2" title="Contact form 1"]'
         );
         ?>

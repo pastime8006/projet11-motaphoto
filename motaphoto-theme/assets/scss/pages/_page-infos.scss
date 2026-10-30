@@ -1,0 +1,170 @@
+@use "../utils/mixins" as mixins;
+
+.page-infos {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 10vw, 144px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2px solid #000;
+
+  .content-zone {
+    width: 100%;
+    max-width: 1152px;
+    display: flex;
+    align-items: stretch;
+    gap: clamp(16px, 4vw, 25px);
+
+    .content-zone-photos {
+      flex: 0 0 563px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .img-zone-photos {
+      display: block;
+      width: 100%;
+      max-width: 563px;
+      height: auto;
+    }
+
+    .content-zone-infos {
+      flex: 0 0 563px;
+      min-width: 0;
+      align-self: stretch;
+      border-bottom: 1px solid #000;
+      display: flex;
+      align-items: end;
+
+      .photos-informations {
+        width: 100%;
+        max-width: 420px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        text-align: left;
+        margin-bottom: 37px;
+
+        h2 {
+          @include mixins.font-space-mono(66px, 400, italic);
+          text-transform: uppercase;
+          line-height: 0.8;
+          margin-bottom: 10px;
+        }
+
+        p {
+          width: 100%;
+          max-width: 420px;
+          @include mixins.font-space-mono(14px, 400, normal);
+          margin: 0;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+  .contact-zone-infos {
+    width: 100%;
+    max-width: 1152px;
+    height: 118px;
+    display: flex;
+
+    border-bottom: 1px solid black;
+
+    .contact-infos {
+      width: 100%;
+      max-width: 563px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      p {
+        @include mixins.font-poppins(14px, 400, light);
+      }
+
+      .btn-contact-infos {
+        width: 272px;
+        height: 50px;
+        @include mixins.font-space-mono(12px, 400, normal);
+        border: none;
+        border-radius: none !important;
+      }
+    }
+
+    .thumbnails-zone-infos {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .photos-parent {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      @include mixins.font-space-mono(18px, 400, normal);
+      text-align: left;
+      margin: 77px 0 52px;
+    }
+  }
+}
+
+//============================================================================
+// MEDIA QUERIES
+//============================================================================
+
+//==============================
+// media query 768px
+//==============================
+
+@include mixins.mquery-768 {
+  .page-infos {
+    .content-zone {
+      flex-direction: column;
+      gap: 24px;
+
+      .content-zone-photos,
+      .content-zone-infos {
+        width: 100%;
+        flex: auto;
+      }
+
+      .img-zone-photos {
+        max-width: 100%;
+      }
+    }
+
+    .photos-parent h3 {
+      margin: 48px 0 32px;
+    }
+  }
+}
+
+//==================================
+// media query 480px
+//==================================
+
+@include mixins.mquery-480 {
+  .page-infos {
+    padding-right: 16px;
+    padding-left: 16px;
+
+    .content-zone {
+      gap: 16px;
+    }
+
+    .photos-parent h3 {
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+  }
+}

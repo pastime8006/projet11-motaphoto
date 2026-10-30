@@ -3,3 +3,27 @@
   max-width: 1440px;
   padding-inline: 50px;
 }
+
+.hero-header {
+  width: 100vw;
+  margin: 0 calc(50% - 50vw) 2rem;
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+
+.hero-header__image {
+  width: 100%;
+  max-width: 1440px;
+  height: clamp(280px, 55vw, 962px);
+  object-fit: cover;
+}
+
+.titre-header {
+  width: 90%;
+  max-width: 1000px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
