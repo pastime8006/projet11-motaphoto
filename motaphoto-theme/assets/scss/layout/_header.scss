@@ -30,12 +30,18 @@
 
       .menu-item {
         list-style: none;
-        @include utils.font-space-mono(16px);
       }
 
       .menu-item a {
         text-decoration: none;
         color: black;
+        @include utils.font-space-mono(16px);
+        transition: 0.7s ease-in;
+      }
+
+      .menu-item a:hover {
+        // Simule le gras sans modifier la largeur du libellé.
+        -webkit-text-stroke: 0.70px currentColor;
       }
     }
   }

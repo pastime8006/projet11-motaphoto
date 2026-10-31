@@ -13,16 +13,40 @@ footer {
     display: flex;
     justify-content: center;
     gap: 86px;
-  
 
     .menu-item {
-      @include utils.font-poppins(16px, 400, normal, 1.5);
       color: #000;
       list-style: none;
     }
     .menu-item a {
+      @include utils.font-space-mono(16px, 400, normal);
       color: #000;
       text-decoration: none;
+      transition: 0.7s ease-in;
+    }
+
+    .menu-item a:hover {
+          // Simule le gras sans modifier la largeur du libellé.
+        -webkit-text-stroke: 0.70px currentColor;
     }
   }
+}
+
+//==================================
+// MÉDIA QUERIES
+//==================================
+
+//==================================
+// Tablet
+//==================================
+
+@include utils.mquery-768 {
+  footer {
+    height: 208px;
+  }
+
+  .footer-menu {
+    flex-direction: column;
+    gap: 24px !important;
+     }
 }

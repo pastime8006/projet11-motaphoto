@@ -1,6 +1,5 @@
 @use "../utils/utils" as utils;
 
-
 .sorting-form {
   width: 100%;
   max-width: 1166px;
@@ -14,7 +13,6 @@
     max-width: 564px;
     display: flex;
     justify-content: space-between;
-
 
     .form-categorie,
     .form-format {
@@ -37,6 +35,7 @@
   }
   .photo-card > a {
     display: block;
+    position: relative;
     aspect-ratio: 564 / 495;
     overflow: hidden;
   }
@@ -45,6 +44,58 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .photo-eye {
+    @include utils.abs-center;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .photo-eye img {
+    width: 6px;
+    height: 6px;
+  }
+
+  .photo-ellipse-bg {
+    position: absolute;
+    top: 11px;
+    right: 18px;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .photo-ellipse-bg img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .photo-ellipse {
+    position: absolute;
+    top: 21px;
+    right: 28px;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .photo-ellipse img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .photo-card > a:hover .photo-eye,
+  .photo-card > a:focus-visible .photo-eye,
+  .photo-card > a:hover .photo-ellipse-bg,
+  .photo-card > a:focus-visible .photo-ellipse-bg,
+  .photo-card > a:hover .photo-ellipse,
+  .photo-card > a:focus-visible .photo-ellipse {
+    opacity: 1;
   }
 }
 
@@ -60,8 +111,58 @@
   }
 }
 
-@media (max-width: 767px) {
+@include utils.mquery-1280 {
+  .sorting-form {
+    gap: 24px;
+
+    .form-taxonomy {
+      max-width: 480px;
+      gap: 16px;
+    }
+
+    .form-categorie,
+    .form-format {
+      width: calc(50% - 8px);
+    }
+
+    .form-tri {
+      width: 220px;
+    }
+  }
+}
+@include utils.mquery-1024 {
+  .photos-grid {
+    padding-inline: 20px;
+  }
+
+  .sorting-form {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    .form-taxonomy {
+      width: 100%;
+      max-width: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: -35px;
+    }
+
+    .form-categorie,
+    .form-format,
+    .form-tri {
+      width: 100%;
+    }
+    .form-tri {
+      max-width: 260px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
   .photos-grid {
     grid-template-columns: minmax(0, 564px);
   }
-}
+  }
+

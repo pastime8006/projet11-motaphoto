@@ -164,7 +164,17 @@ $the_query = new WP_Query($query_args);
                     <?php if (has_post_thumbnail()) : ?>
                         <a href="<?php the_permalink(); ?>">
                             <?php the_post_thumbnail('motaphotos-photos'); ?>
+                            <span class="photo-eye" aria-hidden="true">
+                                <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Icon_eye.png')); ?>" alt="">
+                            </span>
+                            <span class="photo-ellipse-bg" aria-hidden="true">
+                                <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Ellipse2.png')); ?>" alt="">
+                            </span>
+                            <span class="photo-ellipse" aria-hidden="true">
+                                <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Group-31.png')); ?>" alt="">
+                            </span>
                         </a>
+
                     <?php endif; ?>
 
                     <!-- Titre de la photo masqué sur cette page.
