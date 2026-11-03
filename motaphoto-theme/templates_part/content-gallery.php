@@ -1,5 +1,5 @@
 <?php
-// Récupérer les termes des taxonomies
+// Charger les catégories et les formats disponibles pour alimenter les filtres.
 $categories = get_terms([
     'taxonomy'   => 'categorie',
     'hide_empty' => false,
@@ -10,6 +10,7 @@ $formats = get_terms([
     'hide_empty' => false,
 ]);
 
+// Lire et nettoyer les filtres transmis dans l’URL afin de les réutiliser dans le formulaire et la requête.
 // Lire les paramètres de filtrage
 $selected_category = isset($_GET['categorie'])
     ? sanitize_text_field(wp_unslash($_GET['categorie']))
@@ -23,7 +24,7 @@ $selected_sort = isset($_GET['tri'])
     ? sanitize_key(wp_unslash($_GET['tri']))
     : 'date_desc';
 
-// Définir les tris autorisés
+// Associer chaque option de tri à ses critères WP_Query.
 $sort_options = [
     'date_desc' => [
         'orderby' => 'date',
@@ -53,10 +54,12 @@ $sort_options = [
     ],
 ];
 
+// Revenir au tri par date décroissante si l’URL contient une option non autorisée.
 if (!isset($sort_options[$selected_sort])) {
     $selected_sort = 'date_desc';
 }
 
+// Préparer la requête des photos publiées et limiter les résultats à huit par page.
 $query_args = [
     'post_type'      => 'photo',
     'post_status'    => 'publish',
@@ -69,7 +72,7 @@ $query_args = array_merge(
     $sort_options[$selected_sort]
 );
 
-// Filtrer par taxonomies
+// Construire les critères de filtrage par catégorie et par format.
 $tax_query = [];
 
 if ($selected_category !== '') {
@@ -88,17 +91,22 @@ if ($selected_format !== '') {
     ];
 }
 
+// N’ajouter les critères de taxonomie à la requête que si au moins un filtre est sélectionné.
 if (!empty($tax_query)) {
     $query_args['tax_query'] = $tax_query;
     $query_args['tax_query']['relation'] = 'AND';
 }
 
+// Récupérer les photos correspondant aux filtres, au tri et à la page demandée.
 $the_query = new WP_Query($query_args);
 ?>
 
+<!-- Conteneur principal de la galerie de photos. -->
 <section class="photos-page-content">
 
+    <!-- Formulaire GET : permet de choisir une catégorie, un format et un ordre de tri. -->
     <form class="sorting-form" method="get" action="<?php echo esc_url(get_permalink(get_queried_object_id())); ?>">
+        <!-- Liste les catégories disponibles et conserve la sélection active. -->
         <div class="form-taxonomy">
             <select name="categorie" id="categorie" class="form-categorie">
                 <option value="">CATÉGORIES</option>
@@ -114,6 +122,7 @@ $the_query = new WP_Query($query_args);
                 <?php endif; ?>
             </select>
 
+            <!-- Liste les formats disponibles et conserve le format sélectionné. -->
             <select name="format" id="format" class="form-format">
                 <option value="">FORMATS</option>
 
@@ -128,6 +137,7 @@ $the_query = new WP_Query($query_args);
                 <?php endif; ?>
             </select>
         </div>
+        <!-- Propose les modes de tri pris en charge par la requête de la galerie. -->
         <select name="tri" id="tri" class="form-tri">
             <option value="date_desc" <?php selected($selected_sort, 'date_desc'); ?>>
                 Date : plus récent
@@ -148,36 +158,67 @@ $the_query = new WP_Query($query_args);
                 Année : décroissante
             </option>
         </select>
+        
 
+        <!-- Bouton de soumission désactivé dans l’interface actuelle. -->
         <!-- <button type="submit">Filtrer</button> -->
 
     </form>
 
 
+    <!-- Afficher la grille lorsque la requête contient des photos. -->
     <?php if ($the_query->have_posts()) : ?>
+        <!-- Parcourir les photos trouvées pour produire une carte par résultat. -->
         <div class="photos-grid">
             <?php while ($the_query->have_posts()) :
-                $the_query->the_post(); ?>
+                $the_query->the_post();
+                $photo_year       = get_field('annee', get_the_ID());
+                $photo_categories = get_the_terms(get_the_ID(), 'categorie');
+                $photo_reference  = get_field('references', get_the_ID());
+                $photo_category_names = ($photo_categories && !is_wp_error($photo_categories))
+                    ? implode(', ', wp_list_pluck($photo_categories, 'name'))
+                    : '';
+            ?>
 
                 <article id="post-<?php the_ID(); ?>" <?php post_class('photo-card'); ?>>
 
+                    <!-- Afficher la photo avec un lien vers sa page uniquement sur l’icône œil. -->
                     <?php if (has_post_thumbnail()) : ?>
-                        <a href="<?php the_permalink(); ?>">
-                            <?php the_post_thumbnail('motaphotos-photos'); ?>
-                            <span class="photo-eye" aria-hidden="true">
+                        <h4 class="lightbox-cat-right">
+                            <?php if ($photo_categories && !is_wp_error($photo_categories)) : ?>
+                                <p><?php echo esc_html(implode(', ', wp_list_pluck($photo_categories, 'name'))); ?></p>
+                            <?php endif; ?>
+                        </h4>
+
+                        <h4 class="lightbox-title-left">
+                            <?php $photo_id = isset($args['photo_id']) ? absint($args['photo_id']) : 0; ?>
+                            <p><?php echo esc_html(get_the_title()); ?></p>
+                        </h4>
+
+                        <div class="photo-image">
+                            <?php the_post_thumbnail('motaphotos-photos', array(
+                                'class'          => 'img-lightbox',
+                                'data-large-src' => wp_get_attachment_image_url( get_post_thumbnail_id(), 'large' ),
+                                'data-photo-reference' => (string) $photo_reference,
+                                'data-photo-category'  => $photo_category_names,
+                            )); ?>
+                            <a class="photo-eye" href="<?php the_permalink(); ?>" aria-label="Voir <?php echo esc_attr(get_the_title()); ?>">
                                 <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Icon_eye.png')); ?>" alt="">
-                            </span>
-                            <span class="photo-ellipse-bg" aria-hidden="true">
-                                <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Ellipse2.png')); ?>" alt="">
-                            </span>
-                            <span class="photo-ellipse" aria-hidden="true">
-                                <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Group-31.png')); ?>" alt="">
-                            </span>
-                        </a>
+                            </a>
+                            <div class="container-ellipse">
+                                <span class="photo-ellipse-bg" aria-hidden="true">
+                                    <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Ellipse2.png')); ?>" alt="">
+                                </span>
+                                <span class="photo-ellipse" aria-hidden="true">
+                                    <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/Group-31.png')); ?>" alt="">
+                                </span>
+                                 
+                            </div>
+                        </div>
 
                     <?php endif; ?>
 
-                    <!-- Titre de la photo masqué sur cette page.
+                    <!-- Titre volontairement masqué sur cette page.
                     <h2>
                         <a href="<?php the_permalink(); ?>">
                             <?php the_title(); ?>
@@ -192,12 +233,12 @@ $the_query = new WP_Query($query_args);
 
     <?php else : ?>
 
+        <!-- Signaler qu’aucune photo ne correspond aux critères sélectionnés. -->
         <p>Aucune photo trouvée.</p>
 
     <?php endif; ?>
 
-    <!-- BOUTON PAGINATION -->
-
+    <!-- Afficher les liens de navigation uniquement si les résultats occupent plusieurs pages. -->
     <div class="gallery-pagination">
         <button class="btn-pagination">
             <?php if ($the_query->max_num_pages > 1) : ?>
@@ -216,6 +257,7 @@ $the_query = new WP_Query($query_args);
             <?php endif; ?>
         </button>
     </div>
+    <!-- Restaurer les données de l’article principal après la boucle personnalisée. -->
     <?php wp_reset_postdata(); ?>
 
 </section>

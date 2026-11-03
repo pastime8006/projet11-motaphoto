@@ -23,6 +23,6 @@ while ( have_posts() ) :
     </main>
     <?php
 endwhile;
-
+get_template_part( 'templates_part/content-zone-page' );
 // Inclut le pied de page commun du thème.
 get_footer();

@@ -33,6 +33,13 @@
   @include font-space-mono(12px, 400, normal);
   border: none;
   border-radius: none !important;
+  transition: 1.5s;
+}
+
+@mixin motaphoto-btn-hover {
+  background-color: vars.$color-black;
+  color: vars.$color-white;
+  @include font-space-mono(12px, 700, bold);
 }
 
 //===================
@@ -49,13 +56,12 @@
 // Centrage absolute
 //=====================
 
-@mixin abs-center {
+@mixin abs-center{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 
 //=====================
 // select form gallery

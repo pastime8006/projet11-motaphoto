@@ -47,7 +47,13 @@ foreach ( $matching_photos as $candidate_id ) {
     <div class="contact-zone-infos">
         <div class="contact-infos">
             <p>Cette photo vous interese ?</p>
-             <button class="btn-contact-infos">contact</button>
+            <button
+                class="btn-contact-infos"
+                type="button"
+                data-reference="<?php echo esc_attr((string) get_field('references', $photo_id)); ?>"
+            >
+                Contact
+            </button>
          </div>
         <div class="thumbnails-zone-infos">THUMBNAILS</div>
     </div>

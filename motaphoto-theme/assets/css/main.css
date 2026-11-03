@@ -195,6 +195,112 @@ textarea {
   font-display: swap;
 }
 
+#lightbox {
+  --lightbox-arrow-width: clamp(32px, 5vw, 74px);
+  --lightbox-arrow-gap: clamp(8px, 2vw, 20px);
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+}
+
+#lightbox .lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 150px;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: url("../images/icon-cross.png") center/contain no-repeat;
+  filter: invert(1);
+  cursor: pointer;
+}
+
+#lightbox .lightbox-image-wrapper {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  max-height: 80vh;
+}
+
+#lightbox .lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: min(80vw, 100vw - 2 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
+}
+
+#lightbox .lightbox-image-wrapper img {
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+#lightbox .lightbox-metadata {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+#lightbox .lightbox-metadata p {
+  margin: 12px 0 0;
+}
+
+#lightbox .lightbox-category {
+  text-align: right;
+}
+
+#lightbox .lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: var(--lightbox-arrow-width);
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  filter: invert(1);
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+#lightbox .lightbox-arrow--previous {
+  left: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
+  background: url("../images/arrow-prev-light.png") center/100% 18px no-repeat;
+}
+
+#lightbox .lightbox-arrow--next {
+  right: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
+  background: url("../images/arrow-next-bold.png") center/100% 18px no-repeat;
+}
+
+#lightbox .lightbox-arrow--previous:active {
+  background-image: url("../images/arrow-prev-bold.png");
+}
+
+#lightbox .lightbox-arrow--next:active {
+  background-image: url("../images/arrow-next-light.png");
+}
+
+#lightbox.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .site-header {
   width: 100%;
   max-width: 1440px;
@@ -245,7 +351,6 @@ textarea {
 #main {
   width: 100%;
   max-width: 1440px;
-  padding-inline: 50px;
 }
 
 .hero-header {
@@ -342,6 +447,7 @@ footer .footer-menu .menu-item a:hover {
   font-style: medium;
   line-height: 1.5;
   font-display: swap;
+  text-transform: uppercase;
 }
 .sorting-form .form-tri {
   width: 260px;
@@ -356,24 +462,42 @@ footer .footer-menu .menu-item a:hover {
   font-style: medium;
   line-height: 1.5;
   font-display: swap;
+  text-transform: uppercase;
+}
+
+.overlay {
+  position: relative;
+  width: 564px;
+  height: auto;
 }
 
 .photos-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 564px));
   justify-content: center;
-  gap: 40px;
+  gap: 20px;
 }
 .photos-grid .photo-card {
+  position: relative;
   min-width: 0;
 }
-.photos-grid .photo-card > a {
+.photos-grid .photo-image {
   display: block;
   position: relative;
   aspect-ratio: 564/495;
   overflow: hidden;
 }
-.photos-grid .photo-card > a img {
+.photos-grid .photo-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.photos-grid .photo-image > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -383,47 +507,59 @@ footer .footer-menu .menu-item a:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
   display: grid;
   place-items: center;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 .photos-grid .photo-eye img {
-  width: 6px;
-  height: 6px;
+  width: 46px;
+  height: 32px;
 }
-.photos-grid .photo-ellipse-bg {
+.photos-grid .container-ellipse {
   position: absolute;
+  z-index: 2;
   top: 11px;
   right: 18px;
   display: grid;
   place-items: center;
+  width: 34px;
+  height: 34px;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+.photos-grid .photo-ellipse-bg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
 }
 .photos-grid .photo-ellipse-bg img {
-  width: 14px;
-  height: 14px;
+  width: 34px;
+  height: 34px;
 }
 .photos-grid .photo-ellipse {
   position: absolute;
-  top: 21px;
-  right: 28px;
+  inset: 0;
   display: grid;
   place-items: center;
-  opacity: 0;
-  transition: opacity 0.2s ease;
 }
 .photos-grid .photo-ellipse img {
   width: 14px;
   height: 14px;
 }
-.photos-grid .photo-card > a:hover .photo-eye,
-.photos-grid .photo-card > a:focus-visible .photo-eye,
-.photos-grid .photo-card > a:hover .photo-ellipse-bg,
-.photos-grid .photo-card > a:focus-visible .photo-ellipse-bg,
-.photos-grid .photo-card > a:hover .photo-ellipse,
-.photos-grid .photo-card > a:focus-visible .photo-ellipse {
+.photos-grid .photo-card:hover .photo-eye,
+.photos-grid .photo-card:focus-within .photo-eye,
+.photos-grid .photo-card:hover .container-ellipse,
+.photos-grid .photo-card:focus-within .container-ellipse {
+  opacity: 1;
+  pointer-events: auto;
+}
+.photos-grid .photo-card:hover .photo-image::after,
+.photos-grid .photo-card:focus-within .photo-image::after {
   opacity: 1;
 }
 
@@ -446,6 +582,17 @@ footer .footer-menu .menu-item a:hover {
   font-display: swap;
   border: none;
   border-radius: none !important;
+  transition: 1.5s;
+}
+.gallery-pagination .btn-pagination:hover {
+  background-color: #000000;
+  color: #FFFFFF;
+  font-family: "Space Mono", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: bold;
+  line-height: 1.5;
+  font-display: swap;
 }
 
 @media screen and (max-width: 1280px) {
@@ -464,6 +611,54 @@ footer .footer-menu .menu-item a:hover {
     width: 220px;
   }
 }
+.lightbox-title-left,
+.lightbox-cat-right,
+.lightbox-title-left p,
+.lightbox-cat-right p {
+  margin: 0;
+}
+
+.lightbox-title-left {
+  position: absolute;
+  bottom: 12px;
+  left: 23px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: medium;
+  line-height: 1.5;
+  font-display: swap;
+}
+
+.lightbox-cat-right {
+  position: absolute;
+  bottom: 12px;
+  right: 23px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: medium;
+  line-height: 1.5;
+  font-display: swap;
+}
+
+.photo-card:hover .lightbox-title-left,
+.photo-card:hover .lightbox-cat-right,
+.photo-card:focus-within .lightbox-title-left,
+.photo-card:focus-within .lightbox-cat-right {
+  opacity: 1;
+}
+
 @media screen and (max-width: 1024px) {
   .photos-grid {
     padding-inline: 20px;
@@ -600,6 +795,7 @@ footer .footer-menu .menu-item a:hover {
 .page-infos .contact-zone-infos .contact-infos .btn-contact-infos {
   width: 272px;
   height: 50px;
+  background-color: #D8D8D8;
   font-family: "Space Mono", sans-serif;
   font-size: 12px;
   font-weight: 400;
@@ -608,6 +804,17 @@ footer .footer-menu .menu-item a:hover {
   font-display: swap;
   border: none;
   border-radius: none !important;
+  transition: 1.5s;
+}
+.page-infos .contact-zone-infos .contact-infos .btn-contact-infos:hover {
+  background-color: #000000;
+  color: #FFFFFF;
+  font-family: "Space Mono", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: bold;
+  line-height: 1.5;
+  font-display: swap;
 }
 .page-infos .contact-zone-infos .thumbnails-zone-infos {
   flex: 1;
@@ -632,6 +839,22 @@ footer .footer-menu .menu-item a:hover {
   margin: 77px 0 52px;
 }
 
+@media screen and (max-width: 1024px) {
+  .page-infos {
+    padding-inline: clamp(24px, 5vw, 64px);
+  }
+  .page-infos .content-zone {
+    gap: clamp(16px, 2.5vw, 24px);
+  }
+  .page-infos .content-zone .content-zone-photos,
+  .page-infos .content-zone .content-zone-infos {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .page-infos .content-zone .content-zone-infos .photos-informations h2 {
+    font-size: clamp(40px, 6vw, 56px);
+  }
+}
 @media screen and (max-width: 768px) {
   .page-infos .content-zone {
     flex-direction: column;

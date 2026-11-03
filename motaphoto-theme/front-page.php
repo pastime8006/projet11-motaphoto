@@ -17,7 +17,7 @@ while ( have_posts() ) :
             <?php if (has_post_thumbnail()) : ?>
                 <figure class="hero-header">
                     <?php the_post_thumbnail('full', [
-                        'class' => 'hero-header__image',
+                        'class' => 'hero-header__image img-lightbox',
                         'alt'   => esc_attr(get_the_title()),
                     ]); ?>
                     <img class="titre-header"

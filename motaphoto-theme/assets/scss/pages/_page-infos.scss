@@ -49,6 +49,10 @@
         gap: 16px;
         text-align: left;
         margin-bottom: 37px;
+        
+//================================
+//  MEDIA QUERIES
+//================================
 
         h2 {
           @include mixins.font-space-mono(66px, 400, italic);
@@ -88,11 +92,10 @@
       }
 
       .btn-contact-infos {
-        width: 272px;
-        height: 50px;
-        @include mixins.font-space-mono(12px, 400, normal);
-        border: none;
-        border-radius: none !important;
+     @include mixins.motaphoto-btn;
+      }
+      .btn-contact-infos:hover{
+          @include mixins.motaphoto-btn-hover;
       }
     }
 
@@ -121,6 +124,26 @@
 //============================================================================
 // MEDIA QUERIES
 //============================================================================
+
+@include mixins.mquery-1024 {
+  .page-infos {
+    padding-inline: clamp(24px, 5vw, 64px);
+
+    .content-zone {
+      gap: clamp(16px, 2.5vw, 24px);
+
+      .content-zone-photos,
+      .content-zone-infos {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      .content-zone-infos .photos-informations h2 {
+        font-size: clamp(40px, 6vw, 56px);
+      }
+    }
+  }
+}
 
 //==============================
 // media query 768px
