@@ -32,8 +32,12 @@ if ($photo_id && $categories && !is_wp_error($categories)) :
             <h3>VOUS AIMEREZ AUSSI</h3>
             <div class="img-container">
                 <div class="photos-grid">
-                    <?php while ($related_photos->have_posts()) : $related_photos->the_post(); 
-                        $photo_categories = get_the_terms(get_the_ID(), 'categorie'); ?>
+                    <?php while ($related_photos->have_posts()) : $related_photos->the_post();
+                        $photo_categories = get_the_terms(get_the_ID(), 'categorie');
+                        $photo_category_names = ($photo_categories && !is_wp_error($photo_categories))
+                            ? implode(', ', wp_list_pluck($photo_categories, 'name'))
+                            : '';
+                        $photo_reference = get_field('references', get_the_ID()); ?>
 
                         <article id="post-<?php the_ID(); ?>" <?php post_class('photo-card'); ?>>
                             <?php if (has_post_thumbnail()) : ?>
@@ -49,8 +53,10 @@ if ($photo_id && $categories && !is_wp_error($categories)) :
                                 </h4>
                                 <div class="photo-image">
                                     <?php the_post_thumbnail('motaphotos-photos', array(
-                                        'class'          => 'img-lightbox',
-                                        'data-large-src' => wp_get_attachment_image_url( get_post_thumbnail_id(), 'large' ),
+                                        'class'                => 'img-lightbox',
+                                        'data-large-src'       => wp_get_attachment_image_url( get_post_thumbnail_id(), 'large' ),
+                                        'data-photo-reference' => (string) $photo_reference,
+                                        'data-photo-category'  => $photo_category_names,
                                     )); ?>
                                     <a
                                         class="photo-eye"

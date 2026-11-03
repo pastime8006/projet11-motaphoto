@@ -206,7 +206,11 @@ textarea {
   background-color: rgba(0, 0, 0, 0.9);
   display: none;
 }
-
+#lightbox.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #lightbox .lightbox-close {
   position: absolute;
   top: 24px;
@@ -220,14 +224,6 @@ textarea {
   filter: invert(1);
   cursor: pointer;
 }
-
-#lightbox .lightbox-image-wrapper {
-  position: relative;
-  display: inline-flex;
-  max-width: 100%;
-  max-height: 80vh;
-}
-
 #lightbox .lightbox-content {
   display: flex;
   flex-direction: column;
@@ -235,7 +231,12 @@ textarea {
   width: max-content;
   max-width: min(80vw, 100vw - 2 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
 }
-
+#lightbox .lightbox-image-wrapper {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  max-height: 80vh;
+}
 #lightbox .lightbox-image-wrapper img {
   display: block;
   max-width: 100%;
@@ -244,7 +245,6 @@ textarea {
   height: auto;
   object-fit: contain;
 }
-
 #lightbox .lightbox-metadata {
   display: flex;
   justify-content: space-between;
@@ -254,15 +254,12 @@ textarea {
   font-size: 14px;
   text-transform: uppercase;
 }
-
 #lightbox .lightbox-metadata p {
   margin: 12px 0 0;
 }
-
 #lightbox .lightbox-category {
   text-align: right;
 }
-
 #lightbox .lightbox-arrow {
   position: absolute;
   top: 50%;
@@ -276,29 +273,19 @@ textarea {
   transform: translateY(-50%);
   cursor: pointer;
 }
-
 #lightbox .lightbox-arrow--previous {
   left: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
   background: url("../images/arrow-prev-light.png") center/100% 18px no-repeat;
 }
-
+#lightbox .lightbox-arrow--previous:active {
+  background-image: url("../images/arrow-prev-bold.png");
+}
 #lightbox .lightbox-arrow--next {
   right: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
   background: url("../images/arrow-next-bold.png") center/100% 18px no-repeat;
 }
-
-#lightbox .lightbox-arrow--previous:active {
-  background-image: url("../images/arrow-prev-bold.png");
-}
-
 #lightbox .lightbox-arrow--next:active {
   background-image: url("../images/arrow-next-light.png");
-}
-
-#lightbox.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .site-header {
@@ -746,7 +733,7 @@ footer .footer-menu .menu-item a:hover {
   text-align: left;
   margin-bottom: 37px;
 }
-.page-infos .content-zone .content-zone-infos .photos-informations h2 {
+.page-infos .content-zone h2 {
   font-family: "Space Mono", sans-serif;
   font-size: 66px;
   font-weight: 400;
@@ -757,7 +744,7 @@ footer .footer-menu .menu-item a:hover {
   line-height: 0.8;
   margin-bottom: 10px;
 }
-.page-infos .content-zone .content-zone-infos .photos-informations p {
+.page-infos .content-zone p {
   width: 100%;
   max-width: 420px;
   font-family: "Space Mono", sans-serif;
@@ -769,14 +756,15 @@ footer .footer-menu .menu-item a:hover {
   margin: 0;
   text-transform: uppercase;
 }
-.page-infos .contact-zone-infos {
+
+.contact-zone-infos {
   width: 100%;
   max-width: 1152px;
   height: 118px;
   display: flex;
   border-bottom: 1px solid black;
 }
-.page-infos .contact-zone-infos .contact-infos {
+.contact-zone-infos .contact-infos {
   width: 100%;
   max-width: 563px;
   flex: 1;
@@ -784,7 +772,7 @@ footer .footer-menu .menu-item a:hover {
   align-items: center;
   justify-content: space-between;
 }
-.page-infos .contact-zone-infos .contact-infos p {
+.contact-zone-infos .contact-infos p {
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -792,7 +780,7 @@ footer .footer-menu .menu-item a:hover {
   line-height: 1.5;
   font-display: swap;
 }
-.page-infos .contact-zone-infos .contact-infos .btn-contact-infos {
+.contact-zone-infos .contact-infos .btn-contact-infos {
   width: 272px;
   height: 50px;
   background-color: #D8D8D8;
@@ -806,7 +794,7 @@ footer .footer-menu .menu-item a:hover {
   border-radius: none !important;
   transition: 1.5s;
 }
-.page-infos .contact-zone-infos .contact-infos .btn-contact-infos:hover {
+.contact-zone-infos .contact-infos .btn-contact-infos:hover {
   background-color: #000000;
   color: #FFFFFF;
   font-family: "Space Mono", sans-serif;
@@ -816,19 +804,64 @@ footer .footer-menu .menu-item a:hover {
   line-height: 1.5;
   font-display: swap;
 }
-.page-infos .contact-zone-infos .thumbnails-zone-infos {
+.contact-zone-infos .thumbnails-zone-infos {
   flex: 1;
   display: flex;
+  justify-content: end;
+  align-items: start;
+  text-align: center;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box {
+  max-width: 81px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  gap: 8px;
+  margin-top: 8px;
 }
-.page-infos .photos-parent {
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnail-photo {
+  display: block;
+  width: 100%;
+  max-width: 81px;
+  height: 71px;
+  aspect-ratio: 81/71;
+  object-fit: cover;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows a,
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows span {
+  display: block;
+  line-height: 0;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows a:hover {
+  opacity: 0.65;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows span {
+  opacity: 0.35;
+}
+.contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows img {
+  display: block;
+  width: 26px;
+  height: 8px;
+}
+
+.photos-parent {
   width: 100%;
   max-width: 1440px;
   display: flex;
   flex-direction: column;
 }
-.page-infos .photos-parent h3 {
+.photos-parent h3 {
   font-family: "Space Mono", sans-serif;
   font-size: 18px;
   font-weight: 400;

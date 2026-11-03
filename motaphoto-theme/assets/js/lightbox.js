@@ -1,3 +1,4 @@
+// Crée la fenêtre de visualisation et l'ajoute à la page.
 const lightbox = document.createElement('div')
 lightbox.id = 'lightbox'
 lightbox.setAttribute('role', 'dialog')
@@ -5,23 +6,57 @@ lightbox.setAttribute('aria-modal', 'true')
 lightbox.setAttribute('aria-label', 'Galerie photo')
 document.body.appendChild(lightbox)
 
+// Crée le bouton qui ferme la fenêtre.
 const closeButton = document.createElement('button')
 closeButton.type = 'button'
 closeButton.className = 'lightbox-close'
 closeButton.setAttribute('aria-label', 'Fermer la lightbox')
-closeButton.addEventListener('click', () => {
-    lightbox.classList.remove('active')
-})
+closeButton.addEventListener('click', () => lightbox.classList.remove('active'))
 
-let galleryImages = []
-let currentImageIndex = 0
-let enlargedImage
-let categoryLabel
-let referenceLabel
+// Prépare les éléments qui seront réutilisés pour chaque photo ouverte.
+const content = document.createElement('div')
+content.className = 'lightbox-content'
 
-const showImage = index => {
-    currentImageIndex = (index + galleryImages.length) % galleryImages.length
-    const image = galleryImages[currentImageIndex]
+const imageWrapper = document.createElement('div')
+imageWrapper.className = 'lightbox-image-wrapper'
+
+const previousButton = document.createElement('button')
+previousButton.type = 'button'
+previousButton.className = 'lightbox-arrow lightbox-arrow--previous'
+previousButton.setAttribute('aria-label', 'Photo précédente')
+
+const enlargedImage = document.createElement('img')
+
+const nextButton = document.createElement('button')
+nextButton.type = 'button'
+nextButton.className = 'lightbox-arrow lightbox-arrow--next'
+nextButton.setAttribute('aria-label', 'Photo suivante')
+
+imageWrapper.append(previousButton, enlargedImage, nextButton)
+
+const metadata = document.createElement('div')
+metadata.className = 'lightbox-metadata'
+
+const referenceLabel = document.createElement('p')
+referenceLabel.className = 'lightbox-reference'
+
+const categoryLabel = document.createElement('p')
+categoryLabel.className = 'lightbox-category'
+
+metadata.append(referenceLabel, categoryLabel)
+content.append(imageWrapper, metadata)
+lightbox.append(content, closeButton)
+
+// Mémorise les photos de la galerie affichée et l'index de la photo courante.
+let imagesGalerie = []
+let indexActuel = 0
+
+// Met à jour l'image agrandie, sa catégorie et sa référence.
+function afficherPhoto(index) {
+    // Le modulo permet de passer de la dernière photo à la première et inversement.
+    indexActuel = (index + imagesGalerie.length) % imagesGalerie.length
+    const image = imagesGalerie[indexActuel]
+
     enlargedImage.src = image.dataset.largeSrc || image.src
     enlargedImage.alt = image.alt
     categoryLabel.textContent = image.dataset.photoCategory || ''
@@ -30,64 +65,51 @@ const showImage = index => {
         : ''
 }
 
-const previousButton = document.createElement('button')
-previousButton.type = 'button'
-previousButton.className = 'lightbox-arrow lightbox-arrow--previous'
-previousButton.setAttribute('aria-label', 'Photo précédente')
-previousButton.addEventListener('click', () => showImage(currentImageIndex - 1))
+// Charge la galerie qui contient la photo cliquée, puis ouvre la lightbox.
+function ouvrirLightbox(imageCliquee) {
+    const galerie = imageCliquee.closest('.photos-page-content, .photos-parent')
+    if (!galerie) return
 
-const nextButton = document.createElement('button')
-nextButton.type = 'button'
-nextButton.className = 'lightbox-arrow lightbox-arrow--next'
-nextButton.setAttribute('aria-label', 'Photo suivante')
-nextButton.addEventListener('click', () => showImage(currentImageIndex + 1))
+    // Récupère uniquement les images de la grille contenant la photo cliquée.
+    imagesGalerie = Array.from(
+        galerie.querySelectorAll('.photos-grid .img-lightbox')
+    )
+    indexActuel = imagesGalerie.indexOf(imageCliquee)
 
-const openLightbox = image => {
-    const gallery = image.closest('.photos-page-content')
-    galleryImages = Array.from(gallery?.querySelectorAll('.photos-grid .img-lightbox') || [])
-    currentImageIndex = galleryImages.indexOf(image)
+    if (indexActuel === -1) return
 
-    if (currentImageIndex === -1) return
-
-    const imageWrapper = document.createElement('div')
-    imageWrapper.className = 'lightbox-image-wrapper'
-
-    const content = document.createElement('div')
-    content.className = 'lightbox-content'
-
-    enlargedImage = document.createElement('img')
-    categoryLabel = document.createElement('p')
-    categoryLabel.className = 'lightbox-category'
-    referenceLabel = document.createElement('p')
-    referenceLabel.className = 'lightbox-reference'
-    showImage(currentImageIndex)
-
-    imageWrapper.append(previousButton, enlargedImage, nextButton)
-
-    const metadata = document.createElement('div')
-    metadata.className = 'lightbox-metadata'
-    metadata.append(referenceLabel, categoryLabel)
-    content.append(imageWrapper, metadata)
-
-    lightbox.replaceChildren(content, closeButton)
+    afficherPhoto(indexActuel)
     lightbox.classList.add('active')
 }
 
-document.querySelectorAll('.photos-page-content .container-ellipse').forEach(container => {
-    container.addEventListener('click', () => {
-        const image = container.closest('.photo-image')?.querySelector('.img-lightbox')
-        if (image) openLightbox(image)
+// Les boutons changent l'index courant d'une position.
+previousButton.addEventListener('click', () => afficherPhoto(indexActuel - 1))
+nextButton.addEventListener('click', () => afficherPhoto(indexActuel + 1))
+
+// Au clic sur la commande d'une carte, ouvre l'image de cette même carte.
+document.querySelectorAll(
+    '.photos-page-content .container-ellipse, .photos-parent .container-ellipse'
+).forEach(zone => {
+    zone.addEventListener('click', () => {
+        const carte = zone.closest('.photo-image')
+        if (!carte) return
+
+        const image = carte.querySelector('.img-lightbox')
+
+        if (image) ouvrirLightbox(image)
     })
 })
 
+// Ferme la fenêtre uniquement si le clic touche le fond extérieur.
 lightbox.addEventListener('click', event => {
     if (event.target === lightbox) lightbox.classList.remove('active')
 })
 
+// Permet de fermer ou de naviguer au clavier tant que la lightbox est ouverte.
 document.addEventListener('keydown', event => {
     if (!lightbox.classList.contains('active')) return
 
     if (event.key === 'Escape') lightbox.classList.remove('active')
-    if (event.key === 'ArrowLeft') showImage(currentImageIndex - 1)
-    if (event.key === 'ArrowRight') showImage(currentImageIndex + 1)
+    if (event.key === 'ArrowLeft') afficherPhoto(indexActuel - 1)
+    if (event.key === 'ArrowRight') afficherPhoto(indexActuel + 1)
 })

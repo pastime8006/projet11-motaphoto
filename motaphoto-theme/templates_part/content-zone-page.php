@@ -52,10 +52,20 @@ foreach ( $matching_photos as $candidate_id ) {
                 type="button"
                 data-reference="<?php echo esc_attr((string) get_field('references', $photo_id)); ?>"
             >
-                Contact
+            contact
             </button>
          </div>
-        <div class="thumbnails-zone-infos">THUMBNAILS</div>
+        <div class="thumbnails-zone-infos">
+            <div class="thumbnails-box">
+                <?php if ( $photo_id && has_post_thumbnail( $photo_id ) ) : ?>
+                    <?php echo get_the_post_thumbnail( $photo_id, 'thumbnail', array( 'class' => 'thumbnail-photo' ) ); ?>
+                <?php endif; ?>
+                <div class="thumbnails-arrows" aria-hidden="true">
+                    <img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/arrow-thumbnails-righleftt.png' ) ); ?>" alt="">
+                    <img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/arrow-thumbnails-right.png' ) ); ?>" alt="">
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="photos-parent">

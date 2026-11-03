@@ -14,6 +14,36 @@ get_header();
 
             if ( 'photo' === get_post_type() ) :
                 $photo_id = get_the_ID();
+                $previous_photo = get_previous_post();
+                $next_photo     = get_next_post();
+
+                // À la première photo, faire revenir la flèche gauche à la plus récente.
+                if ( ! $previous_photo ) {
+                    $last_photo = get_posts(
+                        array(
+                            'post_type'      => 'photo',
+                            'post_status'    => 'publish',
+                            'posts_per_page' => 1,
+                            'orderby'        => 'date',
+                            'order'          => 'DESC',
+                        )
+                    );
+                    $previous_photo = $last_photo ? $last_photo[0] : null;
+                }
+
+                // À la dernière photo, faire revenir la flèche droite à la plus ancienne.
+                if ( ! $next_photo ) {
+                    $first_photo = get_posts(
+                        array(
+                            'post_type'      => 'photo',
+                            'post_status'    => 'publish',
+                            'posts_per_page' => 1,
+                            'orderby'        => 'date',
+                            'order'          => 'ASC',
+                        )
+                    );
+                    $next_photo = $first_photo ? $first_photo[0] : null;
+                }
                 ?>
                 <div class="main page-infos">
                     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -40,7 +70,34 @@ get_header();
                                     Contact
                                 </button>
                             </div>
-                            <div class="thumbnails-zone-infos">THUMBNAILS</div>
+                            <div class="thumbnails-zone-infos">
+                                <div class="thumbnails-box">
+                                    <?php if ( has_post_thumbnail( $photo_id ) ) : ?>
+                                        <?php echo get_the_post_thumbnail( $photo_id, 'thumbnail', array( 'class' => 'thumbnail-photo' ) ); ?>
+                                    <?php endif; ?>
+                                    <div class="thumbnails-arrows">
+                                        <?php if ( $previous_photo ) : ?>
+                                            <a href="<?php echo esc_url( get_permalink( $previous_photo ) ); ?>" aria-label="Photo précédente">
+                                                <img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/arrow-thumbnails-righleftt.png' ) ); ?>" alt="">
+                                            </a>
+                                        <?php else : ?>
+                                            <span aria-hidden="true">
+                                                <img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/arrow-thumbnails-righleftt.png' ) ); ?>" alt="">
+                                            </span>
+                                        <?php endif; ?>
+
+                                        <?php if ( $next_photo ) : ?>
+                                            <a href="<?php echo esc_url( get_permalink( $next_photo ) ); ?>" aria-label="Photo suivante">
+                                                <img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/arrow-thumbnails-right.png' ) ); ?>" alt="">
+                                            </a>
+                                        <?php else : ?>
+                                            <span aria-hidden="true">
+                                                <img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/arrow-thumbnails-right.png' ) ); ?>" alt="">
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <?php
@@ -55,22 +112,8 @@ get_header();
                 <?php
             else :
                 get_template_part( 'content', get_post_format() );
-
-                if ( comments_open() || get_comments_number() ) :
-                    comments_template();
-                endif;
             endif;
 
-            the_post_navigation(
-                array(
-                    'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'motaphoto-theme' ) . '</span> ' .
-                        '<span class="screen-reader-text">' . __( 'Next post:', 'motaphoto-theme' ) . '</span> ' .
-                        '<span class="post-title">%title</span>',
-                    'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'motaphoto-theme' ) . '</span> ' .
-                        '<span class="screen-reader-text">' . __( 'Previous post:', 'motaphoto-theme' ) . '</span> ' .
-                        '<span class="post-title">%title</span>',
-                )
-            );
             ?>
         <?php endwhile; ?>
     </main>

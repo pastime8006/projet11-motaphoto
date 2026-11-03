@@ -49,75 +49,124 @@
         gap: 16px;
         text-align: left;
         margin-bottom: 37px;
-        
-//================================
-//  MEDIA QUERIES
-//================================
-
-        h2 {
-          @include mixins.font-space-mono(66px, 400, italic);
-          text-transform: uppercase;
-          line-height: 0.8;
-          margin-bottom: 10px;
-        }
-
-        p {
-          width: 100%;
-          max-width: 420px;
-          @include mixins.font-space-mono(14px, 400, normal);
-          margin: 0;
-          text-transform: uppercase;
-        }
       }
+    }
+
+    h2 {
+      @include mixins.font-space-mono(66px, 400, italic);
+      text-transform: uppercase;
+      line-height: 0.8;
+      margin-bottom: 10px;
+    }
+
+    p {
+      width: 100%;
+      max-width: 420px;
+      @include mixins.font-space-mono(14px, 400, normal);
+      margin: 0;
+      text-transform: uppercase;
     }
   }
-  .contact-zone-infos {
+}
+
+.contact-zone-infos {
+  width: 100%;
+  max-width: 1152px;
+  height: 118px;
+  display: flex;
+
+  border-bottom: 1px solid black;
+
+  .contact-infos {
     width: 100%;
-    max-width: 1152px;
-    height: 118px;
+    max-width: 563px;
+    flex: 1;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    border-bottom: 1px solid black;
-
-    .contact-infos {
-      width: 100%;
-      max-width: 563px;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      p {
-        @include mixins.font-poppins(14px, 400, light);
-      }
-
-      .btn-contact-infos {
-     @include mixins.motaphoto-btn;
-      }
-      .btn-contact-infos:hover{
-          @include mixins.motaphoto-btn-hover;
-      }
+    p {
+      @include mixins.font-poppins(14px, 400, light);
     }
 
-    .thumbnails-zone-infos {
-      flex: 1;
+    .btn-contact-infos {
+      @include mixins.motaphoto-btn;
+    }
+    .btn-contact-infos:hover {
+      @include mixins.motaphoto-btn-hover;
+    }
+  }
+
+  .thumbnails-zone-infos {
+    flex: 1;
+    display: flex;
+    justify-content: end;
+    align-items: start;
+    text-align: center;
+
+    .thumbnails-box {
+      max-width: 81px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      width: 100%;
+      gap: 8px;
+      margin-top: 8px;
+
+      .thumbnail-photo {
+        display: block;
+        width: 100%;
+        max-width: 81px;
+        height: 71px;
+        aspect-ratio: 81 / 71;
+        object-fit: cover;
+      }
+
+      .thumbnails-arrows {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        a,
+        span {
+          display: block;
+          line-height: 0;
+        }
+
+        a:hover {
+          opacity: 0.65;
+        }
+
+        a:focus-visible {
+          outline: 2px solid currentColor;
+          outline-offset: 3px;
+        }
+
+        span {
+          opacity: 0.35;
+        }
+
+        img {
+          display: block;
+          width: 26px;
+          height: 8px;
+        }
+      }
     }
   }
+}
 
-  .photos-parent {
-    width: 100%;
-    max-width: 1440px;
-    display: flex;
-    flex-direction: column;
+.photos-parent {
+  width: 100%;
+  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
 
-    h3 {
-      @include mixins.font-space-mono(18px, 400, normal);
-      text-align: left;
-      margin: 77px 0 52px;
-    }
+  h3 {
+    @include mixins.font-space-mono(18px, 400, normal);
+    text-align: left;
+    margin: 77px 0 52px;
   }
 }
 
