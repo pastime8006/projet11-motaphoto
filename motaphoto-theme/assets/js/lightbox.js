@@ -53,12 +53,23 @@ let indexActuel = 0
 
 // Met à jour l'image agrandie, sa catégorie et sa référence.
 function afficherPhoto(index) {
-    // Le modulo permet de passer de la dernière photo à la première et inversement.
-    indexActuel = (index + imagesGalerie.length) % imagesGalerie.length
+    if (imagesGalerie.length === 0) return
+
+    if (index < 0) {
+        indexActuel = imagesGalerie.length - 1
+    } else if (index >= imagesGalerie.length) {
+        indexActuel = 0
+    } else {
+        indexActuel = index
+    }
+
     const image = imagesGalerie[indexActuel]
 
+    // Utilise la version haute résolution si elle est définie, sinon l'image d'origine.
     enlargedImage.src = image.dataset.largeSrc || image.src
+    // Conserve la description de l'image pour l'accessibilité.
     enlargedImage.alt = image.alt
+    // Affiche la catégorie et la référence si elles sont renseignées.
     categoryLabel.textContent = image.dataset.photoCategory || ''
     referenceLabel.textContent = image.dataset.photoReference
         ? `RÉFÉRENCE : ${image.dataset.photoReference}`
@@ -100,10 +111,10 @@ document.querySelectorAll(
     })
 })
 
-// Ferme la fenêtre uniquement si le clic touche le fond extérieur.
-lightbox.addEventListener('click', event => {
-    if (event.target === lightbox) lightbox.classList.remove('active')
-})
+ //Ferme la fenêtre uniquement si le clic touche le fond extérieur.
+ lightbox.addEventListener('click', event => {
+  if (event.target === lightbox) lightbox.classList.remove('active')
+});
 
 // Permet de fermer ou de naviguer au clavier tant que la lightbox est ouverte.
 document.addEventListener('keydown', event => {

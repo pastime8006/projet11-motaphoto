@@ -139,12 +139,33 @@
   justify-content: center;
   padding: 40px 0;
 
-  .btn-pagination {
+  .photos-pagination {
+    display: flex;
+    justify-content: center;
     @include utils.motaphoto-btn;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
   }
 
-  .btn-pagination:hover {
+  .photos-pagination:hover {
     @include utils.motaphoto-btn-hover;
+  }
+
+  .photos-pagination .btn-pagination {
+    min-width: 24px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .photos-pagination .btn-pagination:hover,
+  .photos-pagination .btn-pagination.is-current {
+    text-decoration: underline;
+    font-weight: 700;
   }
 }
 

@@ -557,7 +557,9 @@ footer .footer-menu .menu-item a:hover {
   justify-content: center;
   padding: 40px 0;
 }
-.gallery-pagination .btn-pagination {
+.gallery-pagination .photos-pagination {
+  display: flex;
+  justify-content: center;
   width: 272px;
   height: 50px;
   background-color: #D8D8D8;
@@ -570,8 +572,11 @@ footer .footer-menu .menu-item a:hover {
   border: none;
   border-radius: none !important;
   transition: 1.5s;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
 }
-.gallery-pagination .btn-pagination:hover {
+.gallery-pagination .photos-pagination:hover {
   background-color: #000000;
   color: #FFFFFF;
   font-family: "Space Mono", sans-serif;
@@ -580,6 +585,20 @@ footer .footer-menu .menu-item a:hover {
   font-style: bold;
   line-height: 1.5;
   font-display: swap;
+}
+.gallery-pagination .photos-pagination .btn-pagination {
+  min-width: 24px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+}
+.gallery-pagination .photos-pagination .btn-pagination:hover,
+.gallery-pagination .photos-pagination .btn-pagination.is-current {
+  text-decoration: underline;
+  font-weight: 700;
 }
 
 @media screen and (max-width: 1280px) {
