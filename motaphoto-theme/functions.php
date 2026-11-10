@@ -40,6 +40,15 @@ wp_enqueue_script( 'jquery' );
         filemtime( get_theme_file_path( '/assets/js/lightbox.js' ) ),
         true
     );
+
+      // Charge la lightbox dans le pied de page après jQuery.
+    wp_enqueue_script(
+        'motaphoto-theme-mobile',
+        get_theme_file_uri( '/assets/js/toggle-mobile.js' ),
+        array( 'jquery' ),
+        filemtime( get_theme_file_path( '/assets/js/toggle-mobile.js' ) ),
+        true
+    );
 }
 
 add_action( 'wp_enqueue_scripts', 'motaphoto_theme_enqueue_scripts' );

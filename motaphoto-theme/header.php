@@ -16,6 +16,10 @@
     <div class="custom-logo-container">
         <?php the_custom_logo(); ?>
     </div>
+   <button class="btn-menu-mobile" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+    <div class="line"></div>
+     </button>
+
 
     <nav class="site-navigation" aria-label="Navigation principale">
         <?php
@@ -29,6 +33,7 @@
             )
         );
         ?>
+     
     </nav>
 
 </header>
