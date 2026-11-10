@@ -110,27 +110,22 @@ function motaphoto_get_gallery_query( $category, $format, $sort, $page = 1 ) {
     return new WP_Query( $args );
 }
 
-// Génère les boutons de pagination affichés sous la galerie.
-function motaphoto_render_gallery_pagination( $query, $current_page ) {
-    // N'affiche pas de pagination si tous les résultats tiennent sur une page.
-    if ( $query->max_num_pages < 2 ) {
-        return '';
-    }
+// Génère le bouton permettant de charger la page suivante de la galerie.
+function motaphoto_render_gallery_load_more( $query, $current_page ) {
+    // Garde le bouton visible, mais désactivé quand il n'y a plus de page.
+    $has_more_pages = $current_page < $query->max_num_pages;
 
-    // Capture le HTML des boutons pour le retourner ou l'inclure dans la réponse Ajax.
+    // Capture le bouton pour l'affichage initial ou la réponse Ajax.
     ob_start();
     ?>
     <div class="gallery-pagination">
-        <nav class="photos-pagination" aria-label="Pagination des photos">
-            <?php for ( $page_number = 1; $page_number <= $query->max_num_pages; $page_number++ ) : ?>
-                <button
-                    type="button"
-                    class="btn-pagination gallery-page-link<?php echo $page_number === $current_page ? ' is-current' : ''; ?>"
-                    data-page="<?php echo esc_attr( $page_number ); ?>"
-                    <?php echo $page_number === $current_page ? 'aria-current="page"' : ''; ?>
-                ><?php echo esc_html( $page_number ); ?></button>
-            <?php endfor; ?>
-        </nav>
+        <button
+            type="button"
+            class="photos-pagination gallery-load-more"
+            data-page="<?php echo esc_attr( $current_page + 1 ); ?>"
+            <?php disabled( ! $has_more_pages ); ?>
+            aria-label="<?php esc_attr_e( 'Charger 8 photos supplémentaires', 'motaphoto-theme' ); ?>"
+        ><?php esc_html_e( 'Charger plus', 'motaphoto-theme' ); ?></button>
     </div>
     <?php
     return ob_get_clean();
@@ -146,30 +141,36 @@ function motaphoto_ajax_filter_gallery() {
     $format   = isset( $_POST['format'] ) ? sanitize_title( wp_unslash( $_POST['format'] ) ) : '';
     $sort     = isset( $_POST['tri'] ) ? sanitize_key( wp_unslash( $_POST['tri'] ) ) : 'date_desc';
     $page     = isset( $_POST['paged'] ) ? absint( $_POST['paged'] ) : 1;
+    $append   = isset( $_POST['append'] ) && 1 === absint( $_POST['append'] );
     $query    = motaphoto_get_gallery_query( $category, $format, $sort, $page );
 
-    // Génère les cartes des photos correspondant aux filtres.
+    // Génère une grille complète ou uniquement les cartes à ajouter à la suite.
     ob_start();
     if ( $query->have_posts() ) {
-        echo '<div class="photos-grid">';
+        if ( ! $append ) {
+            echo '<div class="photos-grid">';
+        }
         while ( $query->have_posts() ) {
             $query->the_post();
             get_template_part( 'templates_part/content', 'photo-card' );
         }
-        echo '</div>';
-    } else {
+        if ( ! $append ) {
+            echo '</div>';
+        }
+    } elseif ( ! $append ) {
         echo '<p>Aucune photo trouvée.</p>';
     }
-    // Récupère le HTML généré et prépare la pagination correspondant aux résultats.
+    // Prépare les cartes renvoyées et le bouton pour la page suivante.
     $grid_html = ob_get_clean();
-    $pagination_html = motaphoto_render_gallery_pagination( $query, max( 1, $page ) );
+    $load_more_html = motaphoto_render_gallery_load_more( $query, max( 1, $page ) );
 
     // Restaure les données de l'article principal et renvoie la réponse Ajax.
     wp_reset_postdata();
     wp_send_json_success(
         array(
             'grid'       => $grid_html,
-            'pagination' => $pagination_html,
+            'pagination' => $load_more_html,
+            'append'     => $append,
         )
     );
 }

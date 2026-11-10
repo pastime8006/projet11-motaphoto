@@ -120,17 +120,18 @@
     }
 
     .site-navigation {
-      position: absolute;
+      position: fixed;
       top: 80px;
       right: 0;
       bottom: 0;
       left: 0;
       z-index: 200;
       width: 100vw;
-      height: 100vh;
-      height: calc(100dvh - 80px);
       padding: 0;
       box-sizing: border-box;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
       background-color: utils.$color-primary;
       justify-content: center;
       align-items: center;
@@ -158,6 +159,8 @@
       .main-menu {
         flex-direction: column;
         gap: 18px;
+        margin-block: auto;
+        padding-block: 24px;
 
         .menu-item a {
           color: utils.$color-white;

@@ -14,6 +14,24 @@ body {
   flex-direction: column;
 }
 
+html.menu-open {
+  overflow: hidden;
+}
+
+body.menu-open {
+  position: fixed;
+  top: var(--menu-scroll-offset);
+  overflow: hidden;
+  width: 100%;
+}
+
+.site-main,
+.photos-page-content {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
 img,
 picture,
 video,

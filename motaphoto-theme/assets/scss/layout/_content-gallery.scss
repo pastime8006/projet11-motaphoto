@@ -19,10 +19,125 @@
       @include utils.form-select;
       text-transform: uppercase;
     }
+
+    .custom-select {
+      width: 260px;
+    }
   }
   .form-tri {
     @include utils.form-select;
     text-transform: uppercase;
+  }
+
+  .custom-select--tri {
+    width: 260px;
+  }
+
+  .form-categorie option,
+  .form-format option,
+  .form-tri option {
+    background-color: utils.$color-white;
+    color: utils.$color-black;
+    height: 40px;
+    padding: 0 10px;
+    text-transform: uppercase;
+  }
+
+  .form-categorie option:hover,
+  .form-format option:hover,
+  .form-tri option:hover {
+    background-color: utils.$color-primary !important;
+    color: utils.$color-white;
+  }
+
+  .custom-select {
+    position: relative;
+    min-width: 0;
+  }
+
+  .custom-select__trigger {
+    @include utils.form-select;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin: 0 4px 4px 12px;
+      border-right: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      transform: rotate(45deg);
+    }
+  }
+
+  .custom-select__trigger:hover,
+  .custom-select__trigger:focus-visible {
+    border-color: utils.$color-blue;
+  }
+
+  .custom-select__trigger[aria-expanded="true"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 0;
+  }
+
+  .custom-select__options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    max-height: 240px;
+    margin: 0;
+    padding: 4px 0;
+    overflow-y: auto;
+    border: 1px solid utils.$color-gray;
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+    background: utils.$color-white;
+    list-style: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    @include utils.font-poppins(12px, 500, medium);
+  }
+
+  .custom-select__option {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 10px;
+    color: utils.$color-black;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .custom-select__option:hover,
+  .custom-select__option.is-active {
+    background-color: utils.$color-primary;
+    color: utils.$color-white;
+  }
+
+  .custom-select__option[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  select[hidden] {
+    display: none;
+  }
+
+  .form-tri:hover,
+  .form-tri:focus,
+  .form-categorie:hover,
+  .form-categorie:focus,
+  .form-format:hover,
+  .form-format:focus {
+    border: 1px solid utils.$color-blue;
   }
 }
 
@@ -152,20 +267,14 @@
     @include utils.motaphoto-btn-hover;
   }
 
-  .photos-pagination .btn-pagination {
-    min-width: 24px;
-    height: 32px;
-    padding: 0;
-    background: transparent;
+  .gallery-load-more {
     border: 0;
-    color: inherit;
     cursor: pointer;
   }
 
-  .photos-pagination .btn-pagination:hover,
-  .photos-pagination .btn-pagination.is-current {
-    text-decoration: underline;
-    font-weight: 700;
+  .gallery-load-more:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 
@@ -183,7 +292,15 @@
       width: calc(50% - 8px);
     }
 
+    .form-taxonomy .custom-select {
+      width: calc(50% - 8px);
+    }
+
     .form-tri {
+      width: 220px;
+    }
+
+    .custom-select--tri {
       width: 220px;
     }
   }
@@ -254,7 +371,18 @@
     .form-tri {
       width: 100%;
     }
+
+    .form-taxonomy .custom-select {
+      width: 100%;
+      max-width: 260px;
+    }
+
     .form-tri {
+      max-width: 260px;
+    }
+
+    .custom-select--tri {
+      width: 100%;
       max-width: 260px;
     }
   }

@@ -45,7 +45,7 @@ $the_query = motaphoto_get_gallery_query(
     <form class="sorting-form" method="get" action="<?php echo esc_url(get_permalink(get_queried_object_id())); ?>">
         <!-- Liste les catégories disponibles et conserve la sélection active. -->
         <div class="form-taxonomy">
-            <select name="categorie" id="categorie" class="form-categorie">
+            <select name="categorie" id="categorie" class="form-categorie" aria-label="Catégorie">
                 <option value="">Toutes les catégories</option>
 
                 <?php if (!is_wp_error($categories)) : ?>
@@ -60,7 +60,7 @@ $the_query = motaphoto_get_gallery_query(
             </select>
 
             <!-- Liste les formats disponibles et conserve le format sélectionné. -->
-            <select name="format" id="format" class="form-format">
+            <select name="format" id="format" class="form-format" aria-label="Format">
                 <option value="">Tous les formats</option>
 
                 <?php if (!is_wp_error($formats)) : ?>
@@ -75,7 +75,7 @@ $the_query = motaphoto_get_gallery_query(
             </select>
         </div>
         <!-- Propose les modes de tri pris en charge par la requête de la galerie. -->
-        <select name="tri" id="tri" class="form-tri">
+        <select name="tri" id="tri" class="form-tri" aria-label="Tri">
             <option value="date_all" <?php selected($selected_sort, 'date_all'); ?>>
                 Toutes les dates
             </option>
@@ -102,7 +102,7 @@ $the_query = motaphoto_get_gallery_query(
         <?php else : ?>
             <p>Aucune photo trouvée.</p>
         <?php endif; ?>
-        <?php echo motaphoto_render_gallery_pagination($the_query, $current_page); ?>
+        <?php echo motaphoto_render_gallery_load_more($the_query, $current_page); ?>
     </div>
 
     <?php wp_reset_postdata(); ?>
