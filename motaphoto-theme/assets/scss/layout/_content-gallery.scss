@@ -2,7 +2,8 @@
 
 .sorting-form {
   width: 100%;
-  max-width: 1166px;
+  max-width: 1148px;
+  margin-inline: auto;
   display: flex;
   justify-content: space-between;
   margin-bottom: 39px;
@@ -233,16 +234,16 @@
     height: 14px;
   }
 
-  .photo-card:hover .photo-eye,
-  .photo-card:focus-within .photo-eye,
-  .photo-card:hover .container-ellipse,
-  .photo-card:focus-within .container-ellipse {
+  .photo-image:hover .photo-eye,
+  .photo-image:focus-within .photo-eye,
+  .photo-image:hover .container-ellipse,
+  .photo-image:focus-within .container-ellipse {
     opacity: 1;
     pointer-events: auto;
   }
 
-  .photo-card:hover .photo-image::after,
-  .photo-card:focus-within .photo-image::after {
+  .photo-image:hover::after,
+  .photo-image:focus-within::after {
     opacity: 1;
   }
 }

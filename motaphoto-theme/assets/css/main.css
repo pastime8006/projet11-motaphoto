@@ -190,6 +190,7 @@ textarea {
   box-sizing: border-box;
   border-radius: 8px;
   border: 1px solid #D8D8D8;
+  padding: 10px;
 }
 
 .popup-contact .wpcf7 input {
@@ -315,6 +316,7 @@ textarea {
   justify-content: space-between;
   background-color: white;
   border-bottom: 1px solid #000;
+  margin-bottom: 36px;
 }
 .site-header .custom-logo-container {
   display: flex;
@@ -494,6 +496,8 @@ footer .footer-menu {
   display: flex;
   justify-content: center;
   gap: 86px;
+  margin: 0;
+  padding: 0;
 }
 footer .footer-menu .menu-item {
   color: #000;
@@ -520,12 +524,15 @@ footer .footer-menu .menu-item a:hover {
   }
   .footer-menu {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 24px !important;
   }
 }
 .sorting-form {
   width: 100%;
-  max-width: 1166px;
+  max-width: 1148px;
+  margin-inline: auto;
   display: flex;
   justify-content: space-between;
   margin-bottom: 39px;
@@ -771,15 +778,15 @@ footer .footer-menu .menu-item a:hover {
   width: 14px;
   height: 14px;
 }
-.photos-grid .photo-card:hover .photo-eye,
-.photos-grid .photo-card:focus-within .photo-eye,
-.photos-grid .photo-card:hover .container-ellipse,
-.photos-grid .photo-card:focus-within .container-ellipse {
+.photos-grid .photo-image:hover .photo-eye,
+.photos-grid .photo-image:focus-within .photo-eye,
+.photos-grid .photo-image:hover .container-ellipse,
+.photos-grid .photo-image:focus-within .container-ellipse {
   opacity: 1;
   pointer-events: auto;
 }
-.photos-grid .photo-card:hover .photo-image::after,
-.photos-grid .photo-card:focus-within .photo-image::after {
+.photos-grid .photo-image:hover::after,
+.photos-grid .photo-image:focus-within::after {
   opacity: 1;
 }
 
@@ -955,7 +962,6 @@ footer .footer-menu .menu-item a:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  border: 2px solid #000;
 }
 .page-infos .content-zone {
   width: 100%;
@@ -965,7 +971,8 @@ footer .footer-menu .menu-item a:hover {
   gap: clamp(16px, 4vw, 25px);
 }
 .page-infos .content-zone .content-zone-photos {
-  flex: 0 0 563px;
+  width: 100%;
+  max-width: 563px;
   display: flex;
   justify-content: center;
 }
@@ -976,7 +983,8 @@ footer .footer-menu .menu-item a:hover {
   height: auto;
 }
 .page-infos .content-zone .content-zone-infos {
-  flex: 0 0 563px;
+  width: 100%;
+  max-width: 563px;
   min-width: 0;
   align-self: stretch;
   border-bottom: 1px solid #000;
@@ -1120,6 +1128,7 @@ footer .footer-menu .menu-item a:hover {
   max-width: 1440px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 108px;
 }
 .photos-parent h3 {
   font-family: "Space Mono", sans-serif;

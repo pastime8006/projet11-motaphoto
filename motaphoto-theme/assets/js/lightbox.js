@@ -97,24 +97,21 @@ function ouvrirLightbox(imageCliquee) {
 previousButton.addEventListener('click', () => afficherPhoto(indexActuel - 1))
 nextButton.addEventListener('click', () => afficherPhoto(indexActuel + 1))
 
-// Au clic sur la commande d'une carte, ouvre l'image de cette même carte.
-document.querySelectorAll(
-    '.photos-page-content .container-ellipse, .photos-parent .container-ellipse'
-).forEach(zone => {
-    zone.addEventListener('click', () => {
-        const carte = zone.closest('.photo-image')
-        if (!carte) return
+// Délègue le clic au document pour prendre aussi en charge les cartes ajoutées par Ajax.
+document.addEventListener('click', event => {
+    const zone = event.target instanceof Element
+        ? event.target.closest(
+            '.photos-page-content .container-ellipse, .photos-parent .container-ellipse'
+        )
+        : null
+    if (!zone) return
 
-        const image = carte.querySelector('.img-lightbox')
+    const carte = zone.closest('.photo-image')
+    if (!carte) return
 
-        if (image) ouvrirLightbox(image)
-    })
+    const image = carte.querySelector('.img-lightbox')
+    if (image) ouvrirLightbox(image)
 })
-
- //Ferme la fenêtre uniquement si le clic touche le fond extérieur.
- lightbox.addEventListener('click', event => {
-  if (event.target === lightbox) lightbox.classList.remove('active')
-});
 
 // Permet de fermer ou de naviguer au clavier tant que la lightbox est ouverte.
 document.addEventListener('keydown', event => {

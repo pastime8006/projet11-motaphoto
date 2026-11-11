@@ -9,6 +9,7 @@
   justify-content: space-between;
   background-color: white;
   border-bottom: 1px solid #000;
+  margin-bottom: 36px;
 
   .custom-logo-container {
     @include utils.flex-center;
