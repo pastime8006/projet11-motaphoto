@@ -1,4 +1,4 @@
-// Crée la fenêtre de visualisation et l'ajoute à la page.
+// 1. Création de la fenêtre
 const lightbox = document.createElement('div')
 lightbox.id = 'lightbox'
 lightbox.setAttribute('role', 'dialog')
@@ -6,14 +6,14 @@ lightbox.setAttribute('aria-modal', 'true')
 lightbox.setAttribute('aria-label', 'Galerie photo')
 document.body.appendChild(lightbox)
 
-// Crée le bouton qui ferme la fenêtre.
+// 2. Bouton de fermeture
 const closeButton = document.createElement('button')
 closeButton.type = 'button'
 closeButton.className = 'lightbox-close'
 closeButton.setAttribute('aria-label', 'Fermer la lightbox')
 closeButton.addEventListener('click', () => lightbox.classList.remove('active'))
 
-// Prépare les éléments qui seront réutilisés pour chaque photo ouverte.
+// 3. Structure du contenu
 const content = document.createElement('div')
 content.className = 'lightbox-content'
 
@@ -24,16 +24,26 @@ const previousButton = document.createElement('button')
 previousButton.type = 'button'
 previousButton.className = 'lightbox-arrow lightbox-arrow--previous'
 previousButton.setAttribute('aria-label', 'Photo précédente')
+const previousIcon = document.createElement('i')
+previousIcon.className = 'fa-solid fa-chevron-left'
+previousIcon.setAttribute('aria-hidden', 'true')
+previousButton.append(previousIcon)
 
 const enlargedImage = document.createElement('img')
 
+// Création du bouton et de l'icône pour afficher la photo suivante.
 const nextButton = document.createElement('button')
 nextButton.type = 'button'
 nextButton.className = 'lightbox-arrow lightbox-arrow--next'
 nextButton.setAttribute('aria-label', 'Photo suivante')
+const nextIcon = document.createElement('i')
+nextIcon.className = 'fa-solid fa-chevron-right'
+nextIcon.setAttribute('aria-hidden', 'true')
+nextButton.append(nextIcon)
 
 imageWrapper.append(previousButton, enlargedImage, nextButton)
 
+// 4. Informations de la photo et assemblage
 const metadata = document.createElement('div')
 metadata.className = 'lightbox-metadata'
 
@@ -47,11 +57,11 @@ metadata.append(referenceLabel, categoryLabel)
 content.append(imageWrapper, metadata)
 lightbox.append(content, closeButton)
 
-// Mémorise les photos de la galerie affichée et l'index de la photo courante.
+// 5. État de la galerie
 let imagesGalerie = []
 let indexActuel = 0
 
-// Met à jour l'image agrandie, sa catégorie et sa référence.
+// 6. Affichage et navigation entre les photos
 function afficherPhoto(index) {
     if (imagesGalerie.length === 0) return
 
@@ -76,12 +86,12 @@ function afficherPhoto(index) {
         : ''
 }
 
-// Charge la galerie qui contient la photo cliquée, puis ouvre la lightbox.
+// 7. Ouverture de la lightbox
 function ouvrirLightbox(imageCliquee) {
     const galerie = imageCliquee.closest('.photos-page-content, .photos-parent')
     if (!galerie) return
 
-    // Récupère uniquement les images de la grille contenant la photo cliquée.
+    // Récupère uniquement les images de la grille de cette galerie.
     imagesGalerie = Array.from(
         galerie.querySelectorAll('.photos-grid .img-lightbox')
     )
@@ -93,27 +103,30 @@ function ouvrirLightbox(imageCliquee) {
     lightbox.classList.add('active')
 }
 
-// Les boutons changent l'index courant d'une position.
+// 8. Boutons précédent et suivant
 previousButton.addEventListener('click', () => afficherPhoto(indexActuel - 1))
 nextButton.addEventListener('click', () => afficherPhoto(indexActuel + 1))
 
-// Délègue le clic au document pour prendre aussi en charge les cartes ajoutées par Ajax.
+// 9. Clic sur une photo de la page
+// Écoute le document plutôt que les éléments actuels afin de prendre en compte
+// les nouvelles cartes ajoutées dynamiquement par les filtres et l'AJAX.
 document.addEventListener('click', event => {
-    const zone = event.target instanceof Element
-        ? event.target.closest(
-            '.photos-page-content .container-ellipse, .photos-parent .container-ellipse'
-        )
-        : null
+    // Recherche la zone cliquée, y compris si le clic touche une image enfant.
+    const zone = event.target.closest(
+        '.photos-page-content .container-ellipse, .photos-parent .container-ellipse'
+    )
+
+    // Ignore les clics qui ne concernent pas une zone de lightbox.
     if (!zone) return
 
+    // Retrouve la carte et l'image associées à la zone cliquée.
     const carte = zone.closest('.photo-image')
-    if (!carte) return
+    const image = carte?.querySelector('.img-lightbox')
 
-    const image = carte.querySelector('.img-lightbox')
     if (image) ouvrirLightbox(image)
 })
 
-// Permet de fermer ou de naviguer au clavier tant que la lightbox est ouverte.
+// 10. Commandes au clavier
 document.addEventListener('keydown', event => {
     if (!lightbox.classList.contains('active')) return
 

@@ -1,3 +1,5 @@
+// Point d'entrée des styles de mise en page du thème.
+// Chaque fichier est transmis à main.scss grâce à @forward.
 @forward "header";
 @forward "index";
 @forward "footer";

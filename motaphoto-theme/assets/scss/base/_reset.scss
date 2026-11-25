@@ -1,3 +1,5 @@
+@use "../utils/utils" as utils;
+
 *,
 *::before,
 *::after {
@@ -28,7 +30,7 @@ body.menu-open {
 .site-main,
 .photos-page-content {
   width: 100%;
-  max-width: 1440px;
+  max-width: utils.$layout-max-width;
   margin-inline: auto;
 }
 
@@ -46,4 +48,8 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+h1.entry-title{
+  text-align: center;
 }

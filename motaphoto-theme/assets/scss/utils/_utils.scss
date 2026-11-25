@@ -1,3 +1,5 @@
+// Point d'accès commun aux variables et aux mixins réutilisables.
+// Les fichiers qui utilisent utils peuvent ainsi importer ces deux ressources.
 @forward "variables";
 @forward "mixins";
 

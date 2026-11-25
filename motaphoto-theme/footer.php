@@ -6,13 +6,14 @@
             'theme_location' => 'footer-menu',
             'container'      => false,
             'menu_class'     => 'footer-menu',
+            'aria_label'     => 'Menu secondaire',
             'fallback_cb'    => false,
         )
     );
     ?>
 </footer>
 
-<?php get_template_part( 'templates_part/modal' ); ?>
+<?php get_template_part( 'template-parts/modal' ); ?>
 
 <!-- WordPress ajoute ici les scripts chargés dans le footer. -->
 <?php

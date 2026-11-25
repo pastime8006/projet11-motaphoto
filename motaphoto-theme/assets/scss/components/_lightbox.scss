@@ -1,6 +1,14 @@
 @use "../utils/utils" as utils;
 
+$lightbox-image-max-height: 80vh;
+$lightbox-arrow-height: 22px;
+$lightbox-arrow-icon-height: 18px;
+$lightbox-metadata-gap: 24px;
+
+
+// Fenêtre plein écran affichée lors de l'ouverture d'une image.
 #lightbox {
+  // Variables utilisées pour dimensionner et positionner les flèches.
   --lightbox-arrow-width: clamp(32px, 5vw, 74px);
   --lightbox-arrow-gap: clamp(8px, 2vw, 20px);
   position: fixed;
@@ -8,19 +16,19 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(utils.$color-black, 0.9);
   display: none;
 
+  // Affiche et centre la lightbox lorsque la classe active est ajoutée par JavaScript.
   &.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include utils.flex-center;
   }
 
+  // Bouton de fermeture placé dans l'angle supérieur droit.
   .lightbox-close {
     position: absolute;
-    top: 24px;
-    right: 150px;
+    top: clamp(16px, 3vw, 24px);
+    right: clamp(16px, 10vw, 150px);
     z-index: 1;
     width: 32px;
     height: 32px;
@@ -31,6 +39,7 @@
     cursor: pointer;
   }
 
+  // Conteneur regroupant l'image et les informations de la photo.
   .lightbox-content {
     display: flex;
     flex-direction: column;
@@ -39,46 +48,52 @@
     max-width: min(80vw, calc(100vw - 2 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap))));
   }
 
+  // Zone qui contient l'image agrandie et les boutons de navigation.
   .lightbox-image-wrapper {
     position: relative;
     display: inline-flex;
     max-width: 100%;
-    max-height: 80vh;
+    max-height: $lightbox-image-max-height;
 
+    // Limite la taille de l'image à la zone visible de l'écran.
     img {
       display: block;
       max-width: 100%;
-      max-height: 80vh;
+      max-height: $lightbox-image-max-height;
       width: auto;
       height: auto;
       object-fit: contain;
     }
   }
 
+  // Informations affichées sous l'image agrandie.
   .lightbox-metadata {
     display: flex;
     justify-content: space-between;
-    gap: 24px;
+    gap: $lightbox-metadata-gap;
     width: 100%;
-    color: #fff;
-    font-size: 14px;
+    color: utils.$color-white;
+    @include utils.font-space-mono(14px);
     text-transform: uppercase;
 
+    // Espacement vertical des textes de métadonnées.
     p {
       margin: 12px 0 0;
     }
   }
 
+  // Aligne la catégorie à droite des informations.
   .lightbox-category {
     text-align: right;
   }
 
+  // Boutons de navigation entre les images de la galerie.
   .lightbox-arrow {
     position: absolute;
     top: 50%;
     z-index: 1;
     width: var(--lightbox-arrow-width);
-    height: 22px;
+    height: $lightbox-arrow-height;
     padding: 0;
     border: 0;
     background-color: transparent;
@@ -86,22 +101,52 @@
     transform: translateY(-50%);
     cursor: pointer;
 
+    i {
+      display: none;
+    }
+
+    // Flèche vers la photo précédente.
     &--previous {
       left: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
-      background: url("../images/arrow-prev-light.png") center / 100% 18px no-repeat;
+      background: url("../images/arrow-prev-light.png") center / 100% $lightbox-arrow-icon-height no-repeat;
 
       &:active {
         background-image: url("../images/arrow-prev-bold.png");
       }
     }
 
+    // Flèche vers la photo suivante.
     &--next {
       right: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
-      background: url("../images/arrow-next-bold.png") center / 100% 18px no-repeat;
+      background: url("../images/arrow-next-bold.png") center / 100% $lightbox-arrow-icon-height no-repeat;
 
       &:active {
         background-image: url("../images/arrow-next-light.png");
       }
     }
   }
+
+  // Jusqu'à 1024px, remplace les flèches avec texte par les icônes Font Awesome.
+  @media screen and (max-width: 1024px) {
+    .lightbox-arrow {
+      background: none;
+      color: utils.$color-white;
+      font-size: 22px;
+      line-height: 1;
+      filter: none;
+      transition:
+        color 0.4s ease-in-out,
+        transform 0.4s ease-in-out;
+
+      i {
+        display: block;
+      }
+
+      &:hover {
+        color: utils.$color-gray;
+        transform: translateY(-50%) scale(1.2);
+      }
+    }
+  }
+
 }

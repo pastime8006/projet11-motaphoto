@@ -1,275 +1,253 @@
-// Attend que le document soit prêt et récupère jQuery sous le nom $.
 jQuery(function ($) {
-  
   const $gallery = $("[data-gallery]");
-  let openCustomSelect = null;
 
-  // Pour chaque select du formulaire de tri de la galerie.
+  //=========================================
+  // MENUS DÉROULANTS PERSONNALISÉS
+  //=========================================
+
   $gallery.find(".sorting-form select").each(function () {
-    // Le select natif reste la source de vérité pour le formulaire et Ajax.
-    const select = this;
-    const wrapper = document.createElement("div");
-    const trigger = document.createElement("button");
-    const list = document.createElement("ul");
-    let activeIndex = select.selectedIndex;
+    const select = this; // le select natif reste la source de vérité
+    let active = select.selectedIndex;
 
-    // Pose plusieurs attributs accessibles sur un élément.
-    const setAttrs = (element, attrs) =>
-      Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+    //=========================================
+    // CREATION DU MENU DEROULANT
+    //=========================================
 
-    // Retourne les indices des options qui ne sont pas désactivées.
-    const enabled = () =>
-      Array.from(select.options).flatMap((option, index) => (option.disabled ? [] : [index]));
-
-    // Construit le bouton visible du menu.
-    wrapper.className = `custom-select custom-select--${select.name}`;
-    trigger.type = "button";
-    trigger.className = "custom-select__trigger";
-    setAttrs(trigger, {
-      role: "combobox",
-      "aria-haspopup": "listbox",
-      "aria-expanded": "false",
+    // CREATION DU BOUTON
+    const $trigger = $(
+      '<button type="button" class="custom-select__trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false">',
+    ).attr({
       "aria-controls": `${select.id}-options`,
       "aria-label": select.getAttribute("aria-label") || select.name,
     });
 
-    // Construit la liste qui s'ouvre sous le bouton.
-    list.className = "custom-select__options";
-    list.id = `${select.id}-options`;
-    list.hidden = true;
-    list.setAttribute("role", "listbox");
+    // CREATION DE LA LISTE
+    const $list = $(
+      '<ul class="custom-select__options" role="listbox" hidden>',
+    ).attr("id", `${select.id}-options`);
 
-    // Reproduit les options natives sous forme de lignes HTML stylisables.
-    const items = Array.from(select.options, (option, index) => {
-      const item = document.createElement("li");
-      item.className = "custom-select__option";
-      item.id = `${select.id}-option-${index}`;
-      item.setAttribute("role", "option");
-      item.textContent = option.textContent.trim();
-      if (option.disabled) item.setAttribute("aria-disabled", "true");
-      return item;
-    });
-    list.append(...items);
+    // CREATION DES CHOIX
+    const $items = $(
+      Array.from(
+        select.options,
+        (opt, i) =>
+          $('<li class="custom-select__option" role="option">')
+            .attr({
+              id: `${select.id}-option-${i}`,
+              "aria-disabled": opt.disabled || null,
+            })
+            .text(opt.textContent.trim())[0],
+      ),
+    );
 
-    // Synchronise le texte du bouton et la sélection annoncée aux lecteurs d'écran.
+    // CREATION DU CONTENEUR
+    const $wrapper = $("<div>")
+      .addClass(`custom-select custom-select--${select.name}`)
+      .append($trigger, $list.append($items));
+
+    // SYNCHRONISER LE MENU DÉROULANT PERSONNALISÉ AVEC LE <SELECT> D’ORIGINE.
+    const isOpen = () => !$list.prop("hidden");
+
+    // la fonction qui suit met à jour le texte du bouton et indique quelle option est sélectionnée.
     function sync() {
-      const selected = select.options[select.selectedIndex];
-      trigger.textContent = selected ? selected.textContent.trim() : "";
-      items.forEach((item, index) =>
-        item.setAttribute("aria-selected", String(index === select.selectedIndex))
+      $trigger.text(select.selectedOptions[0]?.textContent.trim() ?? "");
+      $items.each((i, li) =>
+        li.setAttribute("aria-selected", i === select.selectedIndex),
       );
     }
 
-    // Met une option en surbrillance sans modifier la valeur sélectionnée.
-    function setActive(index) {
-      const item = items[index];
-      if (!item || select.options[index].disabled) return;
-
-      activeIndex = index;
-      items.forEach((optionItem, itemIndex) =>
-        optionItem.classList.toggle("is-active", itemIndex === index)
-      );
-      trigger.setAttribute("aria-activedescendant", item.id);
-      item.scrollIntoView({ block: "nearest" });
+    // MET EN ÉVIDENCE L’OPTION SITUÉE À LA POSITION I DANS LE MENU PERSONNALISÉ,
+    function highlight(i) {
+      if (!$items[i] || select.options[i].disabled) return;
+      active = i;
+      $items
+        .removeClass("is-active")
+        .eq(i)
+        .addClass("is-active")[0]
+        .scrollIntoView({ block: "nearest" });
+      $trigger.attr("aria-activedescendant", $items[i].id);
     }
 
-    // Ouvre ou ferme la liste et garde son état accessible à jour.
-    function toggle(open) {
-      if (open && openCustomSelect && openCustomSelect !== toggle) {
-        openCustomSelect(false);
-      }
-
-      list.hidden = !open;
-      trigger.setAttribute("aria-expanded", String(open));
-      if (open) {
-        openCustomSelect = toggle;
-        setActive(select.selectedIndex);
-      } else {
-        trigger.removeAttribute("aria-activedescendant");
-        if (openCustomSelect === toggle) openCustomSelect = null;
-      }
+    // ouvre ou ferme la liste d’options et met à jour les informations d’accessibilité du bouton.
+    function setOpen(open) {
+      $list.prop("hidden", !open);
+      $trigger.attr("aria-expanded", String(open));
+      if (open) highlight(select.selectedIndex);
+      else $trigger.removeAttr("aria-activedescendant");
     }
 
-    // Met à jour le select natif, puis avertit le gestionnaire Ajax si la valeur change.
-    function choose(index) {
-      if (index < 0 || !select.options[index] || select.options[index].disabled) return;
-
-      const changed = select.selectedIndex !== index;
-      select.selectedIndex = index;
+    // sert à choisir une option dans le menu personnalisé, puis à synchroniser ce choix avec le <select> d’origine.
+    function choose(i) {
+      const opt = select.options[i];
+      if (!opt || opt.disabled) return;
+      const changed = select.selectedIndex !== i;
+      select.selectedIndex = i;
       sync();
-      toggle(false);
-      if (changed) select.dispatchEvent(new Event("change", { bubbles: true }));
-      trigger.focus();
+      setOpen(false);
+      $trigger.trigger("focus");
+      if (changed) $(select).trigger("change"); // remonte jusqu'à $gallery
     }
 
-    // Délègue les événements à la liste et ignore les clics hors des options.
-    const indexOf = (event) => {
-      const item = event.target.closest(".custom-select__option");
-      return item ? items.indexOf(item) : -1;
-    };
-    list.addEventListener("pointerover", (event) => setActive(indexOf(event)));
-    list.addEventListener("click", (event) => choose(indexOf(event)));
+    // ajoute les réactions du menu personnalisé au clic et au passage du pointeur
 
-    // Le bouton inverse l'état actuel du menu.
-    trigger.addEventListener("click", () => toggle(list.hidden));
+    $trigger.on("click", () => setOpen(!isOpen()));
 
-    // Gère la navigation clavier entre les options.
-    trigger.addEventListener("keydown", (event) => {
-      const indices = enabled();
-      if (!indices.length) return;
+    $list.on("pointerover click", ".custom-select__option", function (e) {
+      const i = $items.index(this);
+      if (e.type === "click") choose(i);
+      else highlight(i);
+    });
 
-      const position = Math.max(indices.indexOf(activeIndex), 0);
-      const moves = {
-        ArrowDown: indices[(position + 1) % indices.length],
-        ArrowUp: indices[(position - 1 + indices.length) % indices.length],
-        Home: indices[0],
-        End: indices[indices.length - 1],
-      };
+    // Prépare la navigation au clavier dans le menu personnalisé.
 
-      if (event.key in moves) {
-        event.preventDefault();
-        if (list.hidden) toggle(true);
-        setActive(moves[event.key]);
-      } else if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        if (list.hidden) toggle(true);
-        else choose(activeIndex);
-      } else if ((event.key === "Escape" || event.key === "Tab") && !list.hidden) {
-        toggle(false);
+    $trigger.on("keydown", (e) => {
+      const enabled = Array.from(select.options, (o, i) => i).filter(
+        (i) => !select.options[i].disabled,
+      );
+      const n = enabled.length;
+      if (!n) return;
+
+      // détermine quelle option doit devenir active quand l’utilisateur appuie sur Flèche bas, Flèche haut, Début ou Fin.
+
+      const pos = Math.max(enabled.indexOf(active), 0);
+      const target = {
+        ArrowDown: enabled[(pos + 1) % n],
+        ArrowUp: enabled[(pos - 1 + n) % n],
+        Home: enabled[0],
+        End: enabled[n - 1],
+      }[e.key];
+
+      //complète la navigation au clavier du menu personnalisé : il réagit aux flèches, à Entrée, à Espace, à Échap et à Tab.
+
+      if (target !== undefined) {
+        e.preventDefault();
+        if (!isOpen()) setOpen(true);
+        highlight(target);
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (isOpen()) choose(active);
+        else setOpen(true);
+      } else if ((e.key === "Escape" || e.key === "Tab") && isOpen()) {
+        setOpen(false);
       }
     });
 
-    // Synchronise si un autre code modifie la valeur du select natif.
-    select.addEventListener("change", sync);
-    // Ferme le menu au clic extérieur.
-    document.addEventListener("pointerdown", (event) => {
-      if (!wrapper.contains(event.target)) toggle(false);
-    });
+    // Écoute deux événements pour garder le menu synchronisé et pouvoir le fermer.
+    $wrapper.on("menu:close", () => setOpen(false));
+    $(select).on("change", sync);
 
-    // Insère le faux menu après le select, qui reste présent pour les formulaires.
+    // /termine la mise en place du menu personnalisé pour le <select> en cours de traitement.
     sync();
-    select.after(wrapper);
-    wrapper.append(trigger, list);
     select.hidden = true;
+    $(select).after($wrapper);
   });
 
-  let galleryRequest = null;
-  let galleryRequestId = 0;
+  // Ferme les menus personnalisés ouverts quand l’utilisateur clique ou appuie sur le pointeur à l’extérieur de ceux-ci.
+  $(document).on("pointerdown", (e) => {
+    $(".custom-select")
+      .not($(e.target).closest(".custom-select"))
+      .trigger("menu:close");
+  });
 
-  // Charge une page de photos; les pages suivantes s'ajoutent à la grille.
-  function chargerGalerie(page = 1, append = false) {
+  //=========================================
+  // CHARGEMENT AJAX DE LA GALERIE
+  //=========================================
+
+  //prépare et envoie une requête AJAX à WordPress pour charger ou filtrer les photos de la galerie sans recharger la page.
+
+  let request = null;
+
+  function loadGallery(page = 1, append = false) {
     if (!$gallery.length || typeof motaphotoGallery === "undefined") return;
 
-    const requestId = ++galleryRequestId;
-    if (galleryRequest) {
-      galleryRequest.abort();
-    }
+    if (request) request.abort(); // on ne garde que la requête la plus récente
 
-    const $results = $gallery.find(".gallery-results");
+    const val = (name) => $gallery.find(`[name='${name}']`).val();
+    const $results = $gallery
+      .find(".gallery-results")
+      .attr("aria-busy", "true");
     const $button = $gallery.find(".gallery-load-more");
-    $results.attr("aria-busy", "true");
+    if (append) $button.prop("disabled", true).text("Chargement…");
 
-    if (append) {
-      $button.prop("disabled", true).text("Chargement…");
-    }
-
-    galleryRequest = $.ajax({
-      url: motaphotoGallery.ajaxUrl,
-      method: "POST",
-      dataType: "json",
-      data: {
+    // "current" permet à chaque callback de savoir s'il est encore d'actualité.
+    const current = (request = $.post(
+      motaphotoGallery.ajaxUrl,
+      {
         action: "motaphoto_filter_gallery",
         nonce: motaphotoGallery.nonce,
-        categorie: $gallery.find("[name='categorie']").val(),
-        format: $gallery.find("[name='format']").val(),
-        tri: $gallery.find("[name='tri']").val(),
+        categorie: val("categorie"),
+        format: val("format"),
+        tri: val("tri"),
         paged: page,
         append: append ? 1 : 0,
       },
-    })
-      .done(function (response) {
-        if (!response || !response.success || !response.data) {
-          console.error("La réponse du filtrage de la galerie est invalide.", response);
-          return;
-        }
+      null,
+      "json",
+    ));
+
+    //traite la réponse de la requête AJAX, affiche les photos reçues et remet l’interface en état une fois la requête terminée.
+
+    current
+      .done((res) => {
+        if (!res?.success)
+          return console.error("Réponse de filtrage invalide.", res);
+        const { grid, pagination } = res.data;
 
         if (append) {
-          const $responseContent = $("<div>").html(response.data.grid);
-          const $responseGrid = $responseContent.find(".photos-grid").first();
-          const $newPhotos = $responseGrid.length
-            ? $responseGrid.children()
-            : $responseContent.contents();
-
-          $results.find(".photos-grid").append($newPhotos);
+          // On n'ajoute que les nouvelles photos, puis on remplace la pagination.
+          const $tmp = $("<div>").html(grid);
+          const $newGrid = $tmp.find(".photos-grid");
+          $results
+            .find(".photos-grid")
+            .append($newGrid.length ? $newGrid.children() : $tmp.children());
           $results.find(".gallery-pagination").remove();
-          $results.append(response.data.pagination);
+          $results.append(pagination);
         } else {
-          $results.html(response.data.grid + response.data.pagination);
+          $results.html(grid + pagination);
         }
       })
-      .fail(function (xhr, status, error) {
-        if (status !== "abort") {
-          console.error("Échec du filtrage Ajax de la galerie.", status, error);
-          if (requestId === galleryRequestId && append) {
-            $button.prop("disabled", false).text("Charger plus");
-          }
-        }
+      .fail((xhr, status, error) => {
+        if (status !== "abort")
+          console.error("Échec du filtrage Ajax.", status, error);
       })
-      .always(function () {
-        if (requestId !== galleryRequestId) return;
-
-        galleryRequest = null;
+      .always(() => {
+        if (request !== current) return; // une requête plus récente a pris le relais
+        request = null;
         $results.attr("aria-busy", "false");
-
-        const $currentButton = $gallery.find(".gallery-load-more");
-        if (append && Number($currentButton.data("page")) === page) {
-          $currentButton.prop("disabled", false);
-        }
-        $currentButton.text("Charger plus");
+        $button.prop("disabled", false).text("Charger plus");
       });
   }
 
-  // Un changement de filtre recharge la première page et remplace les anciennes photos.
-  $gallery.on("change", ".sorting-form select", function () {
-    chargerGalerie(1);
-  });
-
-  // Le bouton ajoute la page suivante à la grille existante.
+  // relie les menus de tri et de filtrage au chargement de la galerie.
+  $gallery.on("change", ".sorting-form select", () => loadGallery(1));
+  // Gere le clic sur le bouton « Charger plus » de la galerie.
   $gallery.on("click", ".gallery-load-more", function () {
-    chargerGalerie(Number($(this).data("page")), true);
+    loadGallery(Number($(this).data("page")), true);
   });
 
-  // Ouvre la modale depuis le lien Contact ou les boutons de contact des photos.
+  //=========================================
+  // MODALE DE CONTACT
+  //=========================================
+
+  const $popup = $(".popup-overlay");
   $(document).on(
     "click",
     'a[href="#contact"], .btn-contact-infos',
-    function (event) {
-      // Empêche le lien de naviguer vers une ancre ou de recharger la page.
-      event.preventDefault();
-
-      // Récupère la référence attachée au bouton (ou une chaîne vide si elle manque).
-      const reference = $(this).data("reference") || "";
-      // Insère la référence dans le champ du formulaire de contact.
-      $(".popup-contact [name='ref-photos']").val(reference);
-
-      // Affiche la modale de contact.
-      $(".popup-overlay").css("display", "flex");
-    }
+    function (e) {
+      e.preventDefault();
+      $(".popup-contact [name='ref-photos']").val(
+        $(this).data("reference") || "",
+      );
+      $popup.css("display", "flex");
+    },
   );
 
-  // Ferme la modale uniquement si le clic porte sur le fond extérieur.
-  $(".popup-overlay").on("click", function (event) {
-    // Ne ferme pas la modale si l'utilisateur clique sur son contenu.
-    if (event.target === this) {
-      $(this).hide();
-    }
+  // Clic sur le fond uniquement (pas sur le contenu de la modale).
+  $popup.on("click", (e) => {
+    if (e.target === e.currentTarget) $popup.hide();
   });
 
-  // Ferme la modale lorsque l'utilisateur appuie sur la touche Échap.
-  $(document).on("keydown", function (event) {
-    // Vérifie que la touche Échap a été pressée.
-    if (event.key === "Escape") {
-      $(".popup-overlay").hide();
-    }
+  $(document).on("keydown", (e) => {
+    if (e.key === "Escape") $popup.hide();
   });
 });

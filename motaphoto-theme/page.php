@@ -5,7 +5,6 @@
 get_header();
 
 ?>
-<h1>ceci est page.php</h1>
 <?php
 // La boucle WordPress récupère la page demandée et prépare ses données.
 while ( have_posts() ) :
@@ -23,6 +22,5 @@ while ( have_posts() ) :
     </main>
     <?php
 endwhile;
-get_template_part( 'templates_part/content-zone-page' );
 // Inclut le pied de page commun du thème.
 get_footer();

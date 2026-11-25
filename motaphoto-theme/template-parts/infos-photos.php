@@ -1,5 +1,5 @@
 <?php
-// Récupère l’identifiant transmis au template et le normalise en entier non négatif.
+// Convertit l'identifiant transmis en entier positif ou nul.
 $photo_id = isset( $args['photo_id'] ) ? absint( $args['photo_id'] ) : 0;
 
 // Charge les champs personnalisés et les taxonomies associés à la photo.

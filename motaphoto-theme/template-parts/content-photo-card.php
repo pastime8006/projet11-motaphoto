@@ -10,13 +10,13 @@ $photo_category_names = ( $photo_categories && ! is_wp_error( $photo_categories 
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'photo-card' ); ?>>
     <?php if ( has_post_thumbnail() ) : ?>
-        <h4 class="lightbox-cat-right">
+        <div class="lightbox-cat-right">
             <?php if ( $photo_categories && ! is_wp_error( $photo_categories ) ) : ?>
                 <p><?php echo esc_html( $photo_category_names ); ?></p>
             <?php endif; ?>
-        </h4>
+        </div>
 
-        <h4 class="lightbox-title-left"><p><?php echo esc_html( get_the_title() ); ?></p></h4>
+        <div class="lightbox-title-left"><p><?php echo esc_html( get_the_title() ); ?></p></div>
 
         <div class="photo-image">
             <?php the_post_thumbnail( 'motaphotos-photos', array(

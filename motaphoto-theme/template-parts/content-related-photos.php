@@ -23,6 +23,12 @@ if ($photo_id && $categories && !is_wp_error($categories)) :
                 'operator' => 'IN',
             ],
         ],
+        'meta_query'     => [
+            [
+                'key'     => '_thumbnail_id',
+                'compare' => 'EXISTS',
+            ],
+        ],
     ]);
 
     // Afficher le bloc seulement si au moins une photo apparentée existe.
@@ -41,16 +47,15 @@ if ($photo_id && $categories && !is_wp_error($categories)) :
 
                         <article id="post-<?php the_ID(); ?>" <?php post_class('photo-card'); ?>>
                             <?php if (has_post_thumbnail()) : ?>
-                                <h4 class="lightbox-cat-right">
+                                <div class="lightbox-cat-right">
                                     <?php if ($photo_categories && !is_wp_error($photo_categories)) : ?>
                                         <p><?php echo esc_html(implode(', ', wp_list_pluck($photo_categories, 'name'))); ?></p>
                                     <?php endif; ?>
-                                </h4>
+                                </div>
 
-                                <h4 class="lightbox-title-left">
-                                    <?php $photo_id = isset($args['photo_id']) ? absint($args['photo_id']) : 0; ?>
+                                <div class="lightbox-title-left">
                                     <p><?php echo esc_html(get_the_title()); ?></p>
-                                </h4>
+                                </div>
                                 <div class="photo-image">
                                     <?php the_post_thumbnail('motaphotos-photos', array(
                                         'class'                => 'img-lightbox',

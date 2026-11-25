@@ -1,6 +1,18 @@
 <?php
+//==========================================
+// CHARGEMENT DES STYLES ET SCRIPTS DU THÈME
+//==========================================
+
 // Charge les styles et scripts du thème, puis transmet au JavaScript la configuration Ajax.
 function motaphoto_theme_enqueue_scripts() {
+
+    // Charge Font Awesome depuis le CDN pour les icônes de la lightbox.
+    wp_enqueue_style(
+        'font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
+        array(),
+        '6.7.2'
+    );
 
     // Utilise filemtime comme version pour actualiser les fichiers après une modification.
     wp_enqueue_style(
@@ -41,7 +53,7 @@ wp_enqueue_script( 'jquery' );
         true
     );
 
-      // Charge la lightbox dans le pied de page après jQuery.
+      // Charge le js du pied menu mobile
     wp_enqueue_script(
         'motaphoto-theme-mobile',
         get_theme_file_uri( '/assets/js/toggle-mobile.js' ),
@@ -53,11 +65,15 @@ wp_enqueue_script( 'jquery' );
 
 add_action( 'wp_enqueue_scripts', 'motaphoto_theme_enqueue_scripts' );
 
+//==========================================
+// TRI ET REQUÊTE DE LA GALERIE
+//==========================================
+
 // Retourne la liste blanche des tris autorisés et leurs paramètres WP_Query.
 function motaphoto_gallery_sort_options() {
     return array(
-        'date_all'  => array( 'orderby' => 'date', 'order' => 'DESC' ),
-        'date_desc' => array( 'orderby' => 'date', 'order' => 'DESC' ),
+        'date_all'  => array( 'orderby' => 'date', 'order' => 'DESC' ), // Toutes les dates
+        'date_desc' => array( 'orderby' => 'date', 'order' => 'DESC' ), // Plus récentes
         'date_asc'  => array( 'orderby' => 'date', 'order' => 'ASC' ),
         'title_asc' => array( 'orderby' => 'title', 'order' => 'ASC' ),
         'title_desc'=> array( 'orderby' => 'title', 'order' => 'DESC' ),
@@ -110,6 +126,10 @@ function motaphoto_get_gallery_query( $category, $format, $sort, $page = 1 ) {
     return new WP_Query( $args );
 }
 
+//==============================================
+// PAGINATION ET CHARGEMENT AJAX DE LA GALERIE
+//==============================================
+
 // Génère le bouton permettant de charger la page suivante de la galerie.
 function motaphoto_render_gallery_load_more( $query, $current_page ) {
     // Garde le bouton visible, mais désactivé quand il n'y a plus de page.
@@ -152,7 +172,7 @@ function motaphoto_ajax_filter_gallery() {
         }
         while ( $query->have_posts() ) {
             $query->the_post();
-            get_template_part( 'templates_part/content', 'photo-card' );
+            get_template_part( 'template-parts/content', 'photo-card' );
         }
         if ( ! $append ) {
             echo '</div>';
@@ -178,6 +198,9 @@ function motaphoto_ajax_filter_gallery() {
 add_action( 'wp_ajax_motaphoto_filter_gallery', 'motaphoto_ajax_filter_gallery' );
 add_action( 'wp_ajax_nopriv_motaphoto_filter_gallery', 'motaphoto_ajax_filter_gallery' );
 
+//==========================================
+// CONFIGURATION GENERALE DU THEME
+//==========================================
 
 // Active les fonctionnalités WordPress utilisées par le thème.
 function motaphoto_theme_setup() {
@@ -191,12 +214,14 @@ function motaphoto_theme_setup() {
         'flex-width'  => true,
     ) );
     add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ) );
-    add_theme_support( 'menus' );
-    add_theme_support( 'add_meta_boxes_page' );
-    
+  
 }
 
 add_action( 'after_setup_theme', 'motaphoto_theme_setup' );
+
+//==========================================
+// MENUS DE NAVIGATION
+//==========================================
 
 // Déclare les emplacements de menus disponibles dans l'administration WordPress.
 function register_motaphotos_menus(){
@@ -206,17 +231,8 @@ function register_motaphotos_menus(){
 
 add_action('after_setup_theme', 'register_motaphotos_menus');
 
-
-/**
- * Active les attributs de page afin de permettre leur classement dans l'administration.
- */
-add_action('init', function () {
-    add_post_type_support('page', 'page-attributes');
-});
-
-
 //==========================================
-// * OPTIONS D'AFFICHAGE DES PAGES WORDPRESS
+// OPTIONS D'AFFICHAGE DES PAGES WORDPRESS
 //==========================================
 
 /**
@@ -240,6 +256,10 @@ add_action('add_meta_boxes_page', function () {
         'default'
     );
 });
+
+//==========================================
+// AFFICHAGE DES OPTIONS DANS L'EDITEUR
+//==========================================
 
 /**
  * Affiche les cases à cocher et leur état actuel dans le panneau d'options.
@@ -281,6 +301,10 @@ function custom_page_display_options_callback($post) {
         echo '</label></p>';
     }
 }
+
+//==========================================
+// ENREGISTREMENT DES OPTIONS DE PAGE
+//==========================================
 
 /**
  * Enregistre les options cochées après validation de la requête et des droits.
@@ -350,6 +374,10 @@ add_action('save_post_page', function ($post_id) {
     }
 });
 
+//==========================================
+// APPLICATION DES OPTIONS SUR LE SITE
+//==========================================
+
 /**
  * Ajoute au body les classes correspondant aux réglages de la page affichée.
  */
@@ -390,6 +418,10 @@ add_filter('body_class', function ($classes) {
 
     return $classes;
 });
+
+//==========================================
+// REGLES CSS POUR MASQUER LES ELEMENTS
+//==========================================
 
 /**
  * Injecte les règles CSS qui masquent les éléments demandés sur la page.

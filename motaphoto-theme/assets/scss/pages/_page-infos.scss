@@ -1,25 +1,28 @@
 @use "../utils/mixins" as mixins;
+@use "../utils/variables" as vars;
 
+// Mise en page de la page individuelle d'une photo.
 .page-infos {
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 clamp(16px, 10vw, 144px);
+  max-width: vars.$layout-max-width;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 10vw, 144px);
   text-align: center;
 
-
   .content-zone {
+    // Organise les informations et l'image principale sur deux colonnes.
     width: 100%;
     max-width: 1152px;
     display: flex;
-    align-items: stretch;
     gap: clamp(16px, 4vw, 25px);
+    align-items: stretch;
 
     .content-zone-photos {
+      // Zone dédiée à l'image principale.
       width: 100%;
       max-width: 563px;
       display: flex;
@@ -27,63 +30,106 @@
     }
 
     .img-zone-photos {
-      display: block;
+      // Dimensionne l'image de la photo affichée.
       width: 100%;
-      max-width: 563px;
       height: auto;
+      max-width: 563px;
+      display: block;
     }
 
     .content-zone-infos {
+      // Zone contenant le titre et les métadonnées de la photo.
       width: 100%;
       max-width: 563px;
       min-width: 0;
-      align-self: stretch;
-      border-bottom: 1px solid #000;
       display: flex;
+      align-self: stretch;
       align-items: end;
+      border-bottom: 1px solid vars.$color-black;
 
       .photos-informations {
         width: 100%;
         max-width: 420px;
-        box-sizing: border-box;
         display: flex;
+        box-sizing: border-box;
         flex-direction: column;
         gap: 16px;
-        text-align: left;
         margin-bottom: 37px;
+        text-align: left;
       }
     }
 
     h2 {
-      @include mixins.font-space-mono(66px, 400, italic);
-      text-transform: uppercase;
-      line-height: 0.8;
+      // Affiche le titre de la photo dans la mise en page desktop.
       margin-bottom: 10px;
+      @include mixins.font-space-mono(66px, 400, italic);
+      line-height: 0.8;
+      text-transform: uppercase;
     }
 
     p {
+      // Style des informations complémentaires de la photo.
       width: 100%;
       max-width: 420px;
-      @include mixins.font-space-mono(14px, 400, normal);
       margin: 0;
+      @include mixins.font-space-mono(14px, 400, normal);
       text-transform: uppercase;
     }
   }
 }
 
+// Ajoute les séparateurs pleine largeur sur les écrans mobiles.
+@media screen and (max-width: 768px) {
+  .page-infos .content-zone {
+    position: relative;
+
+    &::after {
+      width: 100vw;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      background: vars.$color-black;
+      transform: translateX(-50%);
+      content: "";
+    }
+
+    .content-zone-infos {
+      border-bottom: 0;
+    }
+  }
+
+  .page-infos .contact-zone-infos {
+    position: relative;
+    border-bottom: 0;
+
+    &::after {
+      width: 100vw;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      background: vars.$color-black;
+      transform: translateX(-50%);
+      content: "";
+    }
+  }
+}
+
+// Zone de contact et navigation entre les photos.
 .contact-zone-infos {
   width: 100%;
   max-width: 1152px;
   height: 118px;
   display: flex;
-
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid vars.$color-black;
 
   .contact-infos {
+    // Contient le texte d'appel au contact et le bouton associé.
     width: 100%;
     max-width: 563px;
-    flex: 1;
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: space-between;
 
@@ -100,35 +146,38 @@
   }
 
   .thumbnails-zone-infos {
-    flex: 1;
+    // Affiche la miniature et les flèches de navigation.
     display: flex;
-    justify-content: end;
+    flex: 1;
     align-items: start;
+    justify-content: end;
     text-align: center;
 
     .thumbnails-box {
+      width: 100%;
       max-width: 81px;
       display: flex;
       flex-direction: column;
+      gap: 8px;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      gap: 8px;
       margin-top: 8px;
 
       .thumbnail-photo {
-        display: block;
+        // Taille de la miniature de navigation.
         width: 100%;
-        max-width: 81px;
         height: 71px;
+        max-width: 81px;
         aspect-ratio: 81 / 71;
+        display: block;
         object-fit: cover;
       }
 
       .thumbnails-arrows {
+        // Aligne les liens précédent et suivant.
+        width: 100%;
         display: flex;
         justify-content: space-between;
-        width: 100%;
 
         a,
         span {
@@ -150,26 +199,27 @@
         }
 
         img {
-          display: block;
           width: 26px;
           height: 8px;
+          display: block;
         }
       }
     }
   }
 }
 
+// Section présentant les photos associées.
 .photos-parent {
   width: 100%;
-  max-width: 1440px;
+  max-width: vars.$layout-max-width;
   display: flex;
   flex-direction: column;
   margin-bottom: 108px;
 
   h3 {
+    margin: 77px 0 52px;
     @include mixins.font-space-mono(18px, 400, normal);
     text-align: left;
-    margin: 77px 0 52px;
   }
 }
 
@@ -177,6 +227,7 @@
 // MEDIA QUERIES
 //============================================================================
 
+// Ajuste les espacements et la taille du titre sur les écrans intermédiaires.
 @include mixins.mquery-1024 {
   .page-infos {
     padding-inline: clamp(24px, 5vw, 64px);
@@ -186,8 +237,8 @@
 
       .content-zone-photos,
       .content-zone-infos {
-        flex: 1 1 0;
         min-width: 0;
+        flex: 1 1 0;
       }
 
       .content-zone-infos .photos-informations h2 {
@@ -197,15 +248,16 @@
   }
 }
 
-//==============================
-// media query 768px
-//==============================
+// Passage de la page en une seule colonne sur tablette et mobile.
 
 @include mixins.mquery-768 {
   .page-infos {
+    box-sizing: border-box;
+
     .content-zone {
       flex-direction: column;
       gap: 24px;
+      align-items: center;
 
       .content-zone-photos,
       .content-zone-infos {
@@ -213,20 +265,60 @@
         flex: auto;
       }
 
+      .content-zone-photos {
+        order: -1;
+        margin-inline: auto;
+      }
+
+      .content-zone-infos {
+        width: min(calc(100vw - 108px), 100%);
+        order: 0;
+        margin-inline: auto;
+      }
+
       .img-zone-photos {
         max-width: 100%;
+        margin-inline: auto;
+      }
+    }
+
+    .contact-zone-infos {
+      width: min(calc(100vw - 108px), 100%);
+      margin-inline: auto;
+
+      .contact-infos {
+        flex-direction: column;
+        margin-inline: auto;
+
+        p {
+          width: 100%;
+          max-width: 272px;
+          box-sizing: border-box;
+          text-align: left;
+        }
+
+        .btn-contact-infos{
+          width: 100%;
+          max-width: 272px;
+          box-sizing: border-box;
+          margin-bottom: 14px;
+        }
+
+      }
+      
+      .thumbnails-zone-infos {
+        display: none;
       }
     }
 
     .photos-parent h3 {
       margin: 48px 0 32px;
+      text-align: center;
     }
   }
 }
 
-//==================================
-// media query 480px
-//==================================
+// Réduit les marges latérales sur les petits écrans.
 
 @include mixins.mquery-480 {
   .page-infos {
@@ -235,6 +327,16 @@
 
     .content-zone {
       gap: 16px;
+
+      .content-zone-photos,
+      .content-zone-infos {
+        width: min(calc(100vw - 108px), 100%);
+        margin-inline: auto;
+      }
+    }
+
+    .contact-zone-infos {
+      width: min(calc(100vw - 108px), 100%);
     }
 
     .photos-parent h3 {

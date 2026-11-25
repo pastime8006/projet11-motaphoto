@@ -48,6 +48,10 @@ textarea {
   font: inherit;
 }
 
+h1.entry-title {
+  text-align: center;
+}
+
 /* Space mono regular */
 @font-face {
   font-family: "Space Mono";
@@ -58,21 +62,21 @@ textarea {
 }
 @font-face {
   font-family: "Space Mono";
-  src: url("../fonts/Space_Mono/SpaceMono-italic.ttf") format("truetype");
+  src: url("../fonts/Space_Mono/SpaceMono-Italic.ttf") format("truetype");
   font-style: italic;
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Space Mono";
-  src: url("../fonts/Space_Mono/SpaceMono-bold.ttf") format("truetype");
+  src: url("../fonts/Space_Mono/SpaceMono-Bold.ttf") format("truetype");
   font-style: normal;
   font-weight: 700;
   font-display: swap;
 }
 @font-face {
   font-family: "Space Mono";
-  src: url("../fonts/Space_Mono/SpaceMono-bolditalic.ttf") format("truetype");
+  src: url("../fonts/Space_Mono/SpaceMono-BoldItalic.ttf") format("truetype");
   font-style: italic;
   font-weight: 700;
   font-display: swap;
@@ -94,7 +98,7 @@ textarea {
 @font-face {
   font-family: "Poppins";
   src: url("../fonts/Poppins/Poppins-Light.ttf") format("truetype");
-  font-style: medium;
+  font-style: normal;
   font-weight: 300;
   font-display: swap;
 }
@@ -103,8 +107,7 @@ textarea {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3764705882);
-  display: flex;
+  background: rgba(0, 0, 0, 0.376);
   justify-content: center;
   align-items: center;
   z-index: 999;
@@ -112,9 +115,11 @@ textarea {
 }
 .popup-overlay .popup-contact {
   position: relative;
-  width: 100%;
-  max-width: 597px;
-  height: 769px;
+  width: min(90vw, 597px);
+  max-width: calc(100vw - 2rem);
+  height: auto;
+  max-height: 80vh;
+  overflow: auto;
   background-color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -144,9 +149,23 @@ textarea {
   transform: translateX(-50%);
 }
 
-/*=========================
-  Contact form 7
-/*=========================*/
+@media screen and (max-width: 768px) {
+  .popup-overlay .popup-title img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    left: auto;
+    transform: none;
+  }
+}
+@media screen and (max-width: 480px) {
+  .popup-overlay .popup-contact {
+    width: calc(100vw - 72px);
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+  }
+}
 .wpcf7-form {
   margin-top: 24px !important;
 }
@@ -182,7 +201,6 @@ textarea {
   background-color: #FFFFFF;
 }
 
-/* Tous les champs du formulaire */
 .popup-contact .wpcf7 input,
 .popup-contact .wpcf7 textarea {
   width: 100%;
@@ -232,8 +250,8 @@ textarea {
 }
 #lightbox .lightbox-close {
   position: absolute;
-  top: 24px;
-  right: 150px;
+  top: clamp(16px, 3vw, 24px);
+  right: clamp(16px, 10vw, 150px);
   z-index: 1;
   width: 32px;
   height: 32px;
@@ -269,8 +287,13 @@ textarea {
   justify-content: space-between;
   gap: 24px;
   width: 100%;
-  color: #fff;
+  color: #FFFFFF;
+  font-family: "Space Mono", sans-serif;
   font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  font-display: swap;
   text-transform: uppercase;
 }
 #lightbox .lightbox-metadata p {
@@ -292,6 +315,9 @@ textarea {
   transform: translateY(-50%);
   cursor: pointer;
 }
+#lightbox .lightbox-arrow i {
+  display: none;
+}
 #lightbox .lightbox-arrow--previous {
   left: calc(-1 * (var(--lightbox-arrow-width) + var(--lightbox-arrow-gap)));
   background: url("../images/arrow-prev-light.png") center/100% 18px no-repeat;
@@ -306,6 +332,23 @@ textarea {
 #lightbox .lightbox-arrow--next:active {
   background-image: url("../images/arrow-next-light.png");
 }
+@media screen and (max-width: 1024px) {
+  #lightbox .lightbox-arrow {
+    background: none;
+    color: #FFFFFF;
+    font-size: 22px;
+    line-height: 1;
+    filter: none;
+    transition: color 0.4s ease-in-out, transform 0.4s ease-in-out;
+  }
+  #lightbox .lightbox-arrow i {
+    display: block;
+  }
+  #lightbox .lightbox-arrow:hover {
+    color: #C4C4C4;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
 
 .site-header {
   width: 100%;
@@ -314,9 +357,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  border-bottom: 1px solid #000;
-  margin-bottom: 36px;
+  background-color: #FFFFFF;
 }
 .site-header .custom-logo-container {
   display: flex;
@@ -347,7 +388,7 @@ textarea {
   list-style: none;
 }
 .site-header .site-navigation .main-menu .menu-item a {
-  color: #000;
+  color: #000000;
   text-decoration: none;
   font-family: "Space Mono", sans-serif;
   font-size: 16px;
@@ -453,6 +494,11 @@ textarea {
     font-display: swap;
   }
 }
+@media screen and (max-width: 360px) {
+  .site-header .custom-logo {
+    margin-left: 20px;
+  }
+}
 
 #main {
   width: 100%;
@@ -490,7 +536,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid #000;
+  border-top: 1px solid #000000;
 }
 footer .footer-menu {
   display: flex;
@@ -500,7 +546,7 @@ footer .footer-menu {
   padding: 0;
 }
 footer .footer-menu .menu-item {
-  color: #000;
+  color: #000000;
   list-style: none;
 }
 footer .footer-menu .menu-item a {
@@ -510,7 +556,7 @@ footer .footer-menu .menu-item a {
   font-style: normal;
   line-height: 1.5;
   font-display: swap;
-  color: #000;
+  color: #000000;
   text-decoration: none;
   transition: 0.7s ease-in;
 }
@@ -548,7 +594,7 @@ footer .footer-menu .menu-item a:hover {
 .sorting-form .form-taxonomy .form-format {
   width: 260px;
   height: 43px;
-  border: 1.3px solid #000;
+  border: 1.3px solid #000000;
   border-radius: 8px;
   padding-left: 10px;
   background-color: #FFFFFF;
@@ -566,7 +612,7 @@ footer .footer-menu .menu-item a:hover {
 .sorting-form .form-tri {
   width: 260px;
   height: 43px;
-  border: 1.3px solid #000;
+  border: 1.3px solid #000000;
   border-radius: 8px;
   padding-left: 10px;
   background-color: #FFFFFF;
@@ -603,7 +649,7 @@ footer .footer-menu .menu-item a:hover {
 .sorting-form .custom-select__trigger {
   width: 260px;
   height: 43px;
-  border: 1.3px solid #000;
+  border: 1.3px solid #000000;
   border-radius: 8px;
   padding-left: 10px;
   background-color: #FFFFFF;
@@ -647,9 +693,8 @@ footer .footer-menu .menu-item a:hover {
   width: 100%;
   max-height: 240px;
   margin: 0;
-  padding: 4px 0;
+  padding: 4px 0 0;
   overflow-y: auto;
-  border: 1px solid #C4C4C4;
   border-top: 0;
   border-radius: 0 0 8px 8px;
   background: #FFFFFF;
@@ -675,6 +720,10 @@ footer .footer-menu .menu-item a:hover {
 .sorting-form .custom-select__option.is-active {
   background-color: #E00000;
   color: #FFFFFF;
+}
+.sorting-form .custom-select__option:last-child:hover,
+.sorting-form .custom-select__option:last-child.is-active {
+  border-radius: 0 0 7px 7px;
 }
 .sorting-form .custom-select__option[aria-disabled=true] {
   opacity: 0.5;
@@ -810,7 +859,7 @@ footer .footer-menu .menu-item a:hover {
   line-height: 1.5;
   font-display: swap;
   border: none;
-  border-radius: none !important;
+  border-radius: 0 !important;
   transition: 1.5s;
   align-items: center;
   gap: 12px;
@@ -939,7 +988,7 @@ footer .footer-menu .menu-item a:hover {
     max-width: 260px;
   }
 }
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .photos-grid {
     grid-template-columns: minmax(0, 564px);
   }
@@ -955,20 +1004,20 @@ footer .footer-menu .menu-item a:hover {
 .page-infos {
   width: 100%;
   max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 clamp(16px, 10vw, 144px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 10vw, 144px);
   text-align: center;
 }
 .page-infos .content-zone {
   width: 100%;
   max-width: 1152px;
   display: flex;
-  align-items: stretch;
   gap: clamp(16px, 4vw, 25px);
+  align-items: stretch;
 }
 .page-infos .content-zone .content-zone-photos {
   width: 100%;
@@ -977,66 +1026,98 @@ footer .footer-menu .menu-item a:hover {
   justify-content: center;
 }
 .page-infos .content-zone .img-zone-photos {
-  display: block;
   width: 100%;
-  max-width: 563px;
   height: auto;
+  max-width: 563px;
+  display: block;
 }
 .page-infos .content-zone .content-zone-infos {
   width: 100%;
   max-width: 563px;
   min-width: 0;
-  align-self: stretch;
-  border-bottom: 1px solid #000;
   display: flex;
+  align-self: stretch;
   align-items: end;
+  border-bottom: 1px solid #000000;
 }
 .page-infos .content-zone .content-zone-infos .photos-informations {
   width: 100%;
   max-width: 420px;
-  box-sizing: border-box;
   display: flex;
+  box-sizing: border-box;
   flex-direction: column;
   gap: 16px;
-  text-align: left;
   margin-bottom: 37px;
+  text-align: left;
 }
 .page-infos .content-zone h2 {
+  margin-bottom: 10px;
   font-family: "Space Mono", sans-serif;
   font-size: 66px;
   font-weight: 400;
   font-style: italic;
   line-height: 1.5;
   font-display: swap;
-  text-transform: uppercase;
   line-height: 0.8;
-  margin-bottom: 10px;
+  text-transform: uppercase;
 }
 .page-infos .content-zone p {
   width: 100%;
   max-width: 420px;
+  margin: 0;
   font-family: "Space Mono", sans-serif;
   font-size: 14px;
   font-weight: 400;
   font-style: normal;
   line-height: 1.5;
   font-display: swap;
-  margin: 0;
   text-transform: uppercase;
 }
 
+@media screen and (max-width: 768px) {
+  .page-infos .content-zone {
+    position: relative;
+  }
+  .page-infos .content-zone::after {
+    width: 100vw;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    background: #000000;
+    transform: translateX(-50%);
+    content: "";
+  }
+  .page-infos .content-zone .content-zone-infos {
+    border-bottom: 0;
+  }
+  .page-infos .contact-zone-infos {
+    position: relative;
+    border-bottom: 0;
+  }
+  .page-infos .contact-zone-infos::after {
+    width: 100vw;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    background: #000000;
+    transform: translateX(-50%);
+    content: "";
+  }
+}
 .contact-zone-infos {
   width: 100%;
   max-width: 1152px;
   height: 118px;
   display: flex;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #000000;
 }
 .contact-zone-infos .contact-infos {
   width: 100%;
   max-width: 563px;
-  flex: 1;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: space-between;
 }
@@ -1059,7 +1140,7 @@ footer .footer-menu .menu-item a:hover {
   line-height: 1.5;
   font-display: swap;
   border: none;
-  border-radius: none !important;
+  border-radius: 0 !important;
   transition: 1.5s;
 }
 .contact-zone-infos .contact-infos .btn-contact-infos:hover {
@@ -1073,34 +1154,34 @@ footer .footer-menu .menu-item a:hover {
   font-display: swap;
 }
 .contact-zone-infos .thumbnails-zone-infos {
-  flex: 1;
   display: flex;
-  justify-content: end;
+  flex: 1;
   align-items: start;
+  justify-content: end;
   text-align: center;
 }
 .contact-zone-infos .thumbnails-zone-infos .thumbnails-box {
+  width: 100%;
   max-width: 81px;
   display: flex;
   flex-direction: column;
+  gap: 8px;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  gap: 8px;
   margin-top: 8px;
 }
 .contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnail-photo {
-  display: block;
   width: 100%;
-  max-width: 81px;
   height: 71px;
+  max-width: 81px;
   aspect-ratio: 81/71;
+  display: block;
   object-fit: cover;
 }
 .contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  width: 100%;
 }
 .contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows a,
 .contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows span {
@@ -1118,9 +1199,9 @@ footer .footer-menu .menu-item a:hover {
   opacity: 0.35;
 }
 .contact-zone-infos .thumbnails-zone-infos .thumbnails-box .thumbnails-arrows img {
-  display: block;
   width: 26px;
   height: 8px;
+  display: block;
 }
 
 .photos-parent {
@@ -1131,6 +1212,7 @@ footer .footer-menu .menu-item a:hover {
   margin-bottom: 108px;
 }
 .photos-parent h3 {
+  margin: 77px 0 52px;
   font-family: "Space Mono", sans-serif;
   font-size: 18px;
   font-weight: 400;
@@ -1138,7 +1220,6 @@ footer .footer-menu .menu-item a:hover {
   line-height: 1.5;
   font-display: swap;
   text-align: left;
-  margin: 77px 0 52px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -1150,28 +1231,66 @@ footer .footer-menu .menu-item a:hover {
   }
   .page-infos .content-zone .content-zone-photos,
   .page-infos .content-zone .content-zone-infos {
-    flex: 1 1 0;
     min-width: 0;
+    flex: 1 1 0;
   }
   .page-infos .content-zone .content-zone-infos .photos-informations h2 {
     font-size: clamp(40px, 6vw, 56px);
   }
 }
 @media screen and (max-width: 768px) {
+  .page-infos {
+    box-sizing: border-box;
+  }
   .page-infos .content-zone {
     flex-direction: column;
     gap: 24px;
+    align-items: center;
   }
   .page-infos .content-zone .content-zone-photos,
   .page-infos .content-zone .content-zone-infos {
     width: 100%;
     flex: auto;
   }
+  .page-infos .content-zone .content-zone-photos {
+    order: -1;
+    margin-inline: auto;
+  }
+  .page-infos .content-zone .content-zone-infos {
+    width: min(100vw - 108px, 100%);
+    order: 0;
+    margin-inline: auto;
+  }
   .page-infos .content-zone .img-zone-photos {
     max-width: 100%;
+    margin-inline: auto;
+  }
+  .page-infos .contact-zone-infos {
+    width: min(100vw - 108px, 100%);
+    margin-inline: auto;
+  }
+  .page-infos .contact-zone-infos .contact-infos {
+    flex-direction: column;
+    margin-inline: auto;
+  }
+  .page-infos .contact-zone-infos .contact-infos p {
+    width: 100%;
+    max-width: 272px;
+    box-sizing: border-box;
+    text-align: left;
+  }
+  .page-infos .contact-zone-infos .contact-infos .btn-contact-infos {
+    width: 100%;
+    max-width: 272px;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+  }
+  .page-infos .contact-zone-infos .thumbnails-zone-infos {
+    display: none;
   }
   .page-infos .photos-parent h3 {
     margin: 48px 0 32px;
+    text-align: center;
   }
 }
 @media screen and (max-width: 480px) {
@@ -1181,6 +1300,14 @@ footer .footer-menu .menu-item a:hover {
   }
   .page-infos .content-zone {
     gap: 16px;
+  }
+  .page-infos .content-zone .content-zone-photos,
+  .page-infos .content-zone .content-zone-infos {
+    width: min(100vw - 108px, 100%);
+    margin-inline: auto;
+  }
+  .page-infos .contact-zone-infos {
+    width: min(100vw - 108px, 100%);
   }
   .page-infos .photos-parent h3 {
     margin-top: 32px;

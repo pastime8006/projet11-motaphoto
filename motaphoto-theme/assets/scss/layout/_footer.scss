@@ -1,15 +1,17 @@
 @use "../utils/utils" as utils;
 
+// Mise en page du pied de page et de son menu de navigation.
 footer {
   width: 100%;
-  max-width: 1440px;
+  max-width: utils.$layout-max-width;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid #000;
+  border-top: 1px solid utils.$color-black;
 
   .footer-menu {
+    // Aligne horizontalement les liens du menu sur grand écran.
     display: flex;
     justify-content: center;
     gap: 86px;
@@ -17,30 +19,26 @@ footer {
     padding: 0;
 
     .menu-item {
-      color: #000;
+      // Supprime les puces de la liste WordPress.
+      color: utils.$color-black;
       list-style: none;
     }
     .menu-item a {
+      // Style typographique et transition des liens du footer.
       @include utils.font-space-mono(16px, 400, normal);
-      color: #000;
+      color: utils.$color-black;
       text-decoration: none;
       transition: 0.7s ease-in;
     }
 
     .menu-item a:hover {
-          // Simule le gras sans modifier la largeur du libellé.
+      // Simule le gras sans modifier la largeur du libellé.
         -webkit-text-stroke: 0.70px currentColor;
     }
   }
 }
 
-//==================================
-// MÉDIA QUERIES
-//==================================
-
-//==================================
-// Tablet
-//==================================
+// Adaptation du pied de page pour les écrans de tablette et mobile.
 
 @include utils.mquery-768 {
   footer {

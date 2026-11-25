@@ -1,9 +1,6 @@
 @use "../utils/variables" as vars;
 
-//===================
-// Typography
-//===================
-
+// Police Space Mono
 @mixin font-space-mono($size, $weight: 400, $style: normal, $line-height: 1.5) {
   font-family: "Space Mono", sans-serif;
   font-size: $size;
@@ -13,6 +10,7 @@
   font-display: swap;
 }
 
+// Police Poppins
 @mixin font-poppins($size, $weight: 400, $style: normal, $line-height: 1.5) {
   font-family: "Poppins", sans-serif;
   font-size: $size;
@@ -22,40 +20,32 @@
   font-display: swap;
 }
 
-//===================
-// Boutons
-//===================
-
+// Bouton Motaphoto
 @mixin motaphoto-btn($width: 272px, $height: 50px) {
   width: $width;
   height: $height;
   background-color: vars.$color-gray-light;
   @include font-space-mono(12px, 400, normal);
   border: none;
-  border-radius: none !important;
+  border-radius: 0 !important;
   transition: 1.5s;
 }
 
+// Survol du bouton Motaphoto
 @mixin motaphoto-btn-hover {
   background-color: vars.$color-black;
   color: vars.$color-white;
   @include font-space-mono(12px, 700, bold);
 }
 
-//===================
-// Centrage flex
-//===================
-
+// Centrage avec Flexbox
 @mixin flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-//=====================
-// Centrage absolute
-//=====================
-
+// Centrage absolu
 @mixin abs-center{
   position: absolute;
   top: 50%;
@@ -63,56 +53,55 @@
   transform: translate(-50%, -50%);
 }
 
-//=====================
-// select form gallery
-//=====================
-
+// Champ de sélection
 @mixin form-select {
   width: 260px;
   height: 43px;
-  border: 1.3px solid #000;
+  border: 1.3px solid vars.$color-black;
   border-radius: 8px;
   padding-left: 10px;
   background-color: vars.$color-white;
   @include font-poppins(12px, 500, medium);
 }
 
-//===================
-// Média Queries
-//===================
-
-// Desktop
+// Grands écrans / ordinateurs : 1280px maximum
 @mixin mquery-1280 {
   @media screen and (max-width: 1280px) {
     @content;
   }
 }
 
-//  Laptop
+// Tablettes en mode paysage / petits ordinateurs : 1024px maximum
 @mixin mquery-1024 {
   @media screen and (max-width: 1024px) {
     @content;
   }
 }
 
-//  Medium
+// Tablettes en mode paysage : 960px maximum
 @mixin mquery-960 {
   @media screen and (max-width: 960px) {
     @content;
   }
 }
 
-
-//  Tablet
+// Tablettes en mode portrait : 768px maximum
 @mixin mquery-768 {
   @media screen and (max-width: 768px) {
     @content;
   }
 }
 
-// Large phone
+// Smartphones : 480px maximum
 @mixin mquery-480 {
   @media screen and (max-width: 480px) {
+    @content;
+  }
+}
+
+// Petits smartphones : 360px maximum
+@mixin mquery-360 {
+  @media screen and (max-width: 360px) {
     @content;
   }
 }

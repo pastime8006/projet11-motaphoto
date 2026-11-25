@@ -1,9 +1,13 @@
+@use "../utils/utils" as utils;
+
+// Structure générale de la page d'accueil.
 #main {
   width: 100%;
-  max-width: 1440px;
+  max-width: utils.$layout-max-width;
  
 }
 
+// Bannière principale contenant l'image mise en avant de la page d'accueil.
 .hero-header {
   width: 100vw;
   margin: 0 calc(50% - 50vw) 2rem;
@@ -12,13 +16,15 @@
   justify-content: center;
 }
 
+// Image principale de la bannière, recadrée pour remplir la zone disponible.
 .hero-header__image {
   width: 100%;
-  max-width: 1440px;
+  max-width: utils.$layout-max-width;
   height: clamp(280px, 55vw, 962px);
   object-fit: cover;
 }
 
+// Image du titre superposée au centre de la bannière.
 .titre-header {
   width: 90%;
   max-width: 1000px;

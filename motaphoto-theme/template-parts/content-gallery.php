@@ -96,7 +96,7 @@ $the_query = motaphoto_get_gallery_query(
         <?php if ($the_query->have_posts()) : ?>
             <div class="photos-grid">
                 <?php while ($the_query->have_posts()) : $the_query->the_post(); ?>
-                    <?php get_template_part('templates_part/content', 'photo-card'); ?>
+                    <?php get_template_part('template-parts/content', 'photo-card'); ?>
                 <?php endwhile; ?>
             </div>
         <?php else : ?>

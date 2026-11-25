@@ -1,5 +1,5 @@
 <?php
-/** Modèle utilisé pour afficher les pages WordPress. */
+/** Modèle utilisé pour afficher la page d’accueil. */
 
 // Inclut l'en-tête commun du thème.
 get_header();
@@ -38,7 +38,7 @@ while ( have_posts() ) :
     <?php
 endwhile;
 
-get_template_part( 'templates_part/content-gallery' );
+get_template_part( 'template-parts/content-gallery' );
 
 
 

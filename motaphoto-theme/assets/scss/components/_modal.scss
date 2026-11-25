@@ -1,22 +1,41 @@
 @use "../utils/utils" as utils;
 
+$popup-max-width: 597px;
+$popup-form-max-width: 263px;
+$popup-image-width: 885px;
+$popup-image-height: 106px;
+$popup-max-height: 80vh;
+$popup-field-radius: 8px;
+
+@mixin popup-field {
+  width: 100%;
+  max-width: $popup-form-max-width;
+  box-sizing: border-box;
+  border-radius: $popup-field-radius;
+  border: 1px solid utils.$color-gray-light;
+  padding: 10px;
+}
+
+// Couche sombre qui recouvre la page lorsque la modale est ouverte.
 .popup-overlay {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  background: #00000060;
-  display: flex;
+  background: rgba(utils.$color-black, 0.376);
   justify-content: center;
   align-items: center;
   z-index: 999;
- display: none;
+  display: none;
 
+  // Conteneur principal de la modale de contact.
   .popup-contact {
     position: relative;
-    width: 100%;
-    max-width: 597px;
-    height: 769px;
+    width: min(90vw, $popup-max-width);
+    max-width: calc(100vw - 2rem);
+    height: auto;
+    max-height: $popup-max-height;
+    overflow: auto;
     background-color: utils.$color-white;
     display: flex;
     align-items: center;
@@ -25,6 +44,7 @@
     @include utils.font-poppins(12px, 500);
   }
 
+  // Zone contenant l'image utilisée comme en-tête de la modale.
   .popup-title {
     position: relative;
     z-index: 2;
@@ -34,40 +54,66 @@
     background-color: utils.$color-white;
   }
 
+  // Dimensionne et centre l'image d'en-tête sur les grands écrans.
   .popup-title img {
-    width: 885px;
-    height: 106px;
+    width: $popup-image-width;
+    height: $popup-image-height;
     max-width: none;
-
     position: relative;
     left: 50%;
     transform: translateX(-50%);
   }
+}
+
+// Adapte l'image d'en-tête aux écrans de largeur moyenne.
+@include utils.mquery-768 {
+  .popup-overlay .popup-title img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    left: auto;
+    transform: none;
   }
+}
 
-/*=========================
-  Contact form 7
-/*=========================*/
+// Réduit la largeur de la modale sur les petits écrans.
+@include utils.mquery-480 {
+  .popup-overlay .popup-contact {
+    width: calc(100vw - 72px);
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+  }
+}
 
+// =========================
+// Styles du formulaire Contact Form 7.
+// =========================
+
+// Ajoute un espace au-dessus du formulaire.
 .wpcf7-form {
   margin-top: 24px !important;
 }
 
+// Définit la largeur maximale du formulaire dans la modale.
 .popup-contact .wpcf7 {
   width: 100%;
-  max-width: 263px;
+  max-width: $popup-form-max-width;
 }
 
+// Organise chaque champ et réserve une zone pour les messages d'erreur.
 .popup-contact .wpcf7-form-control-wrap {
   position: relative;
   display: block;
   padding-bottom: 18px;
 }
 
+// Supprime l'espace supplémentaire sous le champ textarea.
 .popup-contact .wpcf7-form-control-wrap:has(textarea) {
   padding-bottom: 0;
 }
 
+// Positionne les messages d'erreur sous les champs concernés.
 .popup-contact .wpcf7-not-valid-tip {
   position: absolute;
   right: 0;
@@ -76,6 +122,7 @@
   margin: 0;
 }
 
+// Met en forme le message de réponse envoyé par Contact Form 7.
 .popup-contact .wpcf7-response-output {
   display: block;
   width: 100%;
@@ -84,26 +131,25 @@
   background-color: utils.$color-white;
 }
 
-/* Tous les champs du formulaire */
+// Styles communs aux champs texte et à la zone de message.
 .popup-contact .wpcf7 input,
 .popup-contact .wpcf7 textarea {
-  width: 100%;
-  max-width: 263px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  border: 1px solid utils.$color-gray-light;
-  padding: 10px;
+  @include popup-field;
 }
 
+// Hauteur et espacement des champs texte.
 .popup-contact .wpcf7 input {
   height: 40px;
   margin-top: 4px;
 }
+
+// Hauteur et espacement de la zone de message.
 .popup-contact .wpcf7 textarea {
   height: 210px;
   margin-top: 4px;
 }
 
+// Style du bouton d'envoi du formulaire.
 .popup-contact .wpcf7-submit {
   height: 50px !important;
   margin-top: 0;

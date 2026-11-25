@@ -1,16 +1,24 @@
 // Colors
 
+// Largeur maximale commune des principaux conteneurs du thème.
+$layout-max-width: 1440px;
+
+// Couleur principale utilisée par les éléments d'accent du thème.
 $color-primary: #E00000;
+// Couleur de fond claire et couleur utilisée sur les éléments blancs.
 $color-white: #FFFFFF;
+// Variantes claires utilisées pour les fonds et les états visuels.
 $color-pink-light: #FFD6D6;
 $color-red-light: #FE5858;
+// Couleur principale du texte et des éléments sombres.
 $color-black: #000000;
 $color-indigo-dark: #313144;
+// Nuances de gris utilisées dans les bordures et les boutons.
 $color-gray: #C4C4C4;
 $color-gray-light: #D8D8D8;
 $color-gray-lighter: #E5E5E5;
 $color-gray-medium: #B8BBC2;
+// Couleur utilisée pour certains états de focus ou d'interaction.
 $color-blue: #9747FF;
 
 
-// Typography
